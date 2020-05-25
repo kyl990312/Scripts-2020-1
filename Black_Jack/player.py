@@ -19,7 +19,7 @@ class Player:
         # ace는 1혹은 11로 모두 사용 가능
         # 일단 11로 계산한 후 21이 넘어가면 1로 인정
         val = 0
-        for i in cards:
+        for i in self.cards:
             val += i
         return val
 
