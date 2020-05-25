@@ -21,6 +21,9 @@ class Player:
         val = 0
         for i in self.cards:
             val += i
-        return val
+        if val> 21:
+            return 1
+        else:
+            return val
 
 
