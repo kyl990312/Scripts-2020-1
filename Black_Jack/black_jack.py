@@ -8,19 +8,19 @@ import random
 class BlackJack:
     def __init__(self):
         self.window = Tk()
-        self.window.tile("Black Jack")
+        self.window.title("Black Jack")
         self.window.geometry("800x600")
 
         self.window.configure(bg = "green")
         self.fontstyle = font.Font(self.window, size = 24, weight = 'bold',family='Consolas')
         self.fontstyle2 = font.Font(self.window, size=16, weight='bold', family='Consolas')
+        self.playerMoney = 1000
         self.setupButton()
         self.setupLabel()
 
         self.player = Player("player")
         self.dealer = Player("dealer")
         self.betMoney = 0
-        self.playerMoney = 1000
         self.nCardsDealer = 0
         self.nCardsPlayer = 0
         self.LcardsPlayer = []
@@ -63,7 +63,7 @@ class BlackJack:
     def setupLabel(self):
         self.LbetMoney = Label(text="$0", width=4, height=1, font=self.fontstyle, bg="green", fg="cyan")
         self.LbetMoney.place(x=200, y=450)
-        self.LplayerMoney = Label(text="You have $1000", width=15, height=1, font=self.fontstyle, bg="green", fg="cyan")
+        self.LplayerMoney = Label(text="You have $" +str(self.playerMoney), width=15, height=1, font=self.fontstyle, bg="green", fg="cyan")
         self.LplayerMoney.place(x=500, y=450)
         self.LplayerPts = Label(text="", width=2, height=1, font=self.fontstyle2, bg="green", fg="white")
         self.LplayerPts.place(x=300, y=300)
@@ -118,7 +118,7 @@ class BlackJack:
         self.hitPlayer(0)
         self.hitDealerDown()
         self.hitPlayer(1)
-        self.hitDealer(0)
+        self.hitDealer(1)
         self.nCardsPlayer = 1
         self.nCardsDealer = 0
 
@@ -137,7 +137,7 @@ class BlackJack:
         self.LcardsPlayer.append(Label(self.window,image=p))
 
         self.LcardsPlayer[self.player.inHand() - 1].image = p
-        self.LcardsPlayer[self.player.inHand() - 1].place(x=250 + n * 30, y=350)
+        self.LcardsPlayer[self.player.inHand() - 1].place(x=250 +30* n, y=350)
 
         self.LplayerPts.configure(text=str(self.player.value()))
         PlaySound('sounds/cardFlip1.wav', SND_FILENAME)
@@ -149,9 +149,10 @@ class BlackJack:
             self.checkWinner()
 
     def checkWinner(self):
-        p = PhotoImage(file="cards/" + self.dealer.cards[0].filename())
-        self.LcardsDealer[0].configure(image=p)
-        self.LcardsDealer[0].image = p
+        for i in range(1,len(self.LcardsDealer),1):
+            p = PhotoImage(file="cards/" + self.dealer.cards[i].filename())
+            self.LcardsDealer[i].configure(image=p)
+            self.LcardsDealer[i].image = p
 
         self.LdealerPts.configure(text=str(self.dealer.value()))
 
@@ -192,6 +193,80 @@ class BlackJack:
         self.Again['state'] = 'disabled'
         self.Again['bg'] = 'gray'
 
+    def hitDealerDown(self):
+        # 딜러의 카드 두장중 한장을 뒤집는다
+        newCard = Card(self.cardDeck[self.deckN])
+        self.deckN += 1
+        self.dealer.addCard(newCard)
+        p = PhotoImage(file="cards/" + newCard.filename())
+        self.LcardsDealer.append(Label(self.window, image=p))
+
+        self.LcardsDealer[self.dealer.inHand() - 1].image = p
+        self.LcardsDealer[self.dealer.inHand() - 1].place(x=250, y=150)
+
+        PlaySound('sounds/cardFlip1.wav', SND_FILENAME)
+
+
+    def hitDealer(self,n):
+        if self.dealer.value() <= 17:
+            newCard = Card(self.cardDeck[self.deckN])
+            self.deckN += 1
+            self.dealer.addCard(newCard)
+            p = PhotoImage(file="cards/" + 'b2fv.png')
+            self.LcardsDealer.append(Label(self.window, image=p))
+
+            self.LcardsDealer[self.dealer.inHand() - 1].image = p
+            self.LcardsDealer[self.dealer.inHand() - 1].place(x=250 + n * 30, y=150)
+
+            PlaySound('sounds/cardFlip1.wav', SND_FILENAME)
+            return True
+        return False
+
+
+    def pressedStay(self):
+        # 플레이어가 카드를 더이상 받지 않는다
+        # 플레이어가 스테이를 누르면 해당라운드가 종료된다
+        # 플레이어와 딜러의 점수를 계산해 결과를 내야한다
+        n = 2
+        while(self.hitDealer(n)):
+            n += 1
+        self.checkWinner()
+        # win lose push 의 경우가 있다
+        self.Again['state'] = 'active'
+        self.Again['bg'] = 'gray94'
+
+
+    def pressedDeal(self):
+        # 라운드의 처음에 카드를 나눠준다
+        # 카드는 딜러와 플레이어에게 각각 2장씩 나눠준다
+        self.deal()
+        self.Stay['state'] = 'active'
+        self.Stay['bg'] = 'gray94'
+        self.Hit['state'] = 'active'
+        self.Hit['bg'] = 'gray94'
+
+        self.Deal['state'] = 'disabled'
+        self.Deal['bg']='gray'
+
+
+    def pressedAgain(self):
+        # 새로운 라운드를 시작한다
+        # 모든 상황을 리셋시킨다.
+
+        self.player = Player("player")
+        self.dealer = Player("dealer")
+        self.betMoney = 0
+        self.nCardsDealer = 0
+        self.nCardsPlayer = 0
+        for l in self.LcardsPlayer:
+            l.destroy()
+        for l in self.LcardsDealer:
+            l.destroy()
+        self.LcardsPlayer.clear()
+        self.LcardsDealer.clear()
+        self.deckN = 0
+        self.setupButton()
+        self.setupLabel()
 
 
 
