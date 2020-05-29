@@ -10,7 +10,8 @@ def MakeUniDataByMajor(majorSeq):
     contentElements = contentTree.iter('content')
     univercityList = []
     for c in contentElements:
-        if c.find('area'):
+        #print(not c.find('area') is None)
+        if not(c.find('area') == None):
             uni = University()
             area = c.find('area')
             schoolName = c.find('schoolName')
@@ -18,11 +19,8 @@ def MakeUniDataByMajor(majorSeq):
             uni.area = area.text
             uni.schoolName = schoolName.text
             uni.url = url.text
+            uni.show()
             univercityList.append(uni)
-
-
-
-
 
 
 seqAndClass = ExtractmClassAndMajorSeq()
