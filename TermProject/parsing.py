@@ -1,9 +1,9 @@
 
 # -*- coding:utf-8 -*-
 import urllib.request
-import urllib.parse
 from xml.etree import ElementTree
-def makeURL(str):
+
+def MakeURL(str):
     url ='http://www.career.go.kr/cnet/openapi/getOpenApi?apiKey=f69311384cfad095723cfa18c740c10b&svcType=api' + str
     return url
 
@@ -17,16 +17,20 @@ def RequestXML(url):
         print("error code: "+rescode)
         return None
 
-def DataBuilder():
+def MakeTree(str):          # 요청변수를 받아 xml파일을 tree로 반환해주는 함수이다.
     # list xml 파싱
-    url = makeURL('&svcCode=MAJOR&contentType=xml&gubun=univ_list')
+    url = MakeURL(str)
     listXmlFile = RequestXML(url)
-    #xml 문서에서 mClass와 majorSeq 추출
+    print(listXmlFile.decode('utf-8'))
     tree = ElementTree.fromstring(listXmlFile)
-    itemElements = tree.iter("content")
-    dictList = []
-    for item in itemElements:
-        mClass = item.find("mClass")
-        majorSeq = item.find("majorSeq")
-        dictList.append({mClass.text : majorSeq.text})
-    return dictList
+    return tree
+
+def ExtractmClassAndMajorSeq():
+    contentTree = MakeTree('&svcCode=MAJOR&contentType=xml&gubun=univ_list')
+    contentElements= contentTree.iter('content')
+    dict = {}
+    for content in contentElements:
+        mClass = content.find("mClass")
+        majorSeq = content.find("majorSeq")
+        dict[mClass.text] = majorSeq.text
+    return dict
