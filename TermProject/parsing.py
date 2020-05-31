@@ -3,6 +3,7 @@
 import urllib.request
 from xml.etree import ElementTree
 
+
 def MakeURL(str):
     url ='http://www.career.go.kr/cnet/openapi/getOpenApi?apiKey=f69311384cfad095723cfa18c740c10b&svcType=api' + str
     return url
@@ -25,12 +26,20 @@ def MakeTree(str):          # 요청변수를 받아 xml파일을 tree로 반환
     tree = ElementTree.fromstring(listXmlFile)
     return tree
 
+from Datas import *
 def ExtractmClassAndMajorSeq():
     contentTree = MakeTree('&svcCode=MAJOR&contentType=xml&gubun=univ_list')
     contentElements= contentTree.iter('content')
     dict = {}
     for content in contentElements:
+        data = listURLData()
         mClass = content.find("mClass")
         majorSeq = content.find("majorSeq")
-        dict[mClass.text] = majorSeq.text
+        subject = content.find('lClass')
+
+        data.seq = majorSeq.text
+        data.sbject = subject.text
+
+        dict[mClass.text] = data
     return dict
+

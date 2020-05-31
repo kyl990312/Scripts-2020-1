@@ -1,0 +1,24 @@
+필요 데이터
+
+학과이름 - major
+대학이름 - schoolName (university node)
+주소 - ...n
+사이트 URL - schoolURL (university node)
+전화번호 - 없음
+대학분류 - univSe  (list)
+지역 - area (university node)
+============================
+계열 - 
+학과이름 - major
+학과계열 - subject (list)
+세부 관련 학과 - department
+주요과목 - main_subject->SBJECT_NM
+학과전망 - subject (list)
+졸업 후 취업분야 - gradeuate (enter_filed)
+===========================
+취업률 - employment
+임금 - salary
+첫 직장 만족도 - satisfaction
+상황 - after_graduation
+관련직업 - job
+관련자격 - qualification
