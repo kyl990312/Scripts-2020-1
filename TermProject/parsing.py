@@ -2,7 +2,8 @@
 # -*- coding:utf-8 -*-
 import urllib.request
 from xml.etree import ElementTree
-
+# 빨간줄 뜨면 file -> settings -> pakage + -> request install
+import requests
 
 def MakeURL(str):
     url ='http://www.career.go.kr/cnet/openapi/getOpenApi?apiKey=f69311384cfad095723cfa18c740c10b&svcType=api' + str
@@ -43,3 +44,14 @@ def ExtractmClassAndMajorSeq():
         dict[mClass.text] = data
     return dict
 
+
+def PasUniData():
+    searching = '한국산업기술대학교'
+
+    url = 'https://dapi.kakao.com/v2/local/search/keyword.json?query={}'.format(searching)
+    headers = {
+        "Authorization": "KakaoAK 729569259cfcf6680016148bd34f19fb"
+    }
+    places = requests.get(url, headers=headers).json()['documents']
+
+    print(places)
