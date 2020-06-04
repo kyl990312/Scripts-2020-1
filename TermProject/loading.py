@@ -1,12 +1,6 @@
 from parsing import*
 from Datas import*
 
-majorUniListDiction = {}        # 학과이름 : 학과가 있는 대학들의 정보
-majorDataDiction = {}           # 학과이름 : 학과정보
-jobDataDiction = {}             # 학과이름 : 취업정보
-seqAndClass = {}                # 학과이름 : listURL에 있던 학과정보
-
-
 def FindUniInList(uni,lst):
     for l in lst:
         if( uni.schoolName == l.schoolName) and (uni.campusName == l.campusName):
@@ -20,78 +14,60 @@ def UniqueList(lst):
             uniUniqueList.append(uni)
     return uniUniqueList
 
-def MakeDataByMajorSeq(majorSeq):
-    str ="&svcCode=MAJOR_VIEW&contentType=xml&gubun=univ_list&majorSeq="+majorSeq
-    tree= MakeTree(str)
+class Data:
+    def __init__(self):
+        self.UniList= []  # 학과이름 : 학과가 있는 대학들의 정보
+        self.majorData = None  # 학과이름 : 학과정보
+        self.jobData = None  # 학과이름 : 취업정보
+        self.seqAndClass = ExtractmClassAndMajorSeq()  # 학과이름 : listURL에 있던 학과정보
 
-    majorData = Major()
-    jobData = Job()
-    univercityList = []
-    for c in tree.iter('content'):
-        if not(c.find('schoolName') is None):
-            uni = University()
-            schoolName = c.find('schoolName')
-            campusName = c.find('campus_nm')
-            area = c.find('area')
-            url = c.find('schoolURL')
-            uni.area = area.text
-            uni.schoolName = schoolName.text
-            uni.campusName = campusName.text
-            uni.url = url.text
-            univercityList.append(uni)
-        elif not(c.find('SBJECT_NM') is None):
-            subject = c.find('SBJECT_NM')
-            majorData.main_subjects.append(subject.text)
-        elif not(c.find('department') is None):
-            department = c.find('department')
-            majorData.department = department.text
-        elif not (c.find('name') is None):
-            if c.find('name').text == "졸업 후 첫 직업 분야":
-                majorData.graduates.append(c.find('item').text)
-            elif c.find('name').text == "취업률":
-                jobData.employmentRate[c.find('item').text] = c.find('data').text
-            elif c.find('name').text == "졸업 후 첫 직장 월평균 임금":
-                jobData.salary[c.find('item').text] = c.find('data').text
-            elif c.find('name').text == "첫 직장 만족도":
-                jobData.satisfaction[c.find('item').text] = c.find('data').text
-            elif c.find('name').text == "졸업 후 상황":
-                jobData.afterGraduation[c.find('item').text] = c.find('data').text
-        if not (c.find('job') is None):
-            jobData.job = c.find('job').text
-        if not (c.find('qualifications') is None):
-            jobData.qualification = c.find('qualifications').text
+    def Loading(self,major):
+        print("loading...")
+        str = "&svcCode=MAJOR_VIEW&contentType=xml&gubun=univ_list&majorSeq=" + self.seqAndClass[major].seq
+        tree = MakeTree(str)
 
-    univercityList = UniqueList(univercityList)
-    returnDataList = [univercityList,majorData,jobData]
-    return returnDataList
+        self.majorData = Major()
+        self.jobData = Job()
+        self.UniList.clear()
+        for c in tree.iter('content'):
+            if not (c.find('schoolName') is None):
+                uni = University()
+                schoolName = c.find('schoolName')
+                campusName = c.find('campus_nm')
+                area = c.find('area')
+                url = c.find('schoolURL')
+                uni.area = area.text
+                uni.schoolName = schoolName.text
+                uni.campusName = campusName.text
+                uni.url = url.text
+                self.UniList.append(uni)
+            elif not (c.find('SBJECT_NM') is None):
+                subject = c.find('SBJECT_NM')
+                self.majorData.main_subjects.append(subject.text)
+            elif not (c.find('department') is None):
+                department = c.find('department')
+                self.majorData.department = department.text
+            elif not (c.find('name') is None):
+                if c.find('name').text == "졸업 후 첫 직업 분야":
+                    self.majorData.graduates.append(c.find('item').text)
+                elif c.find('name').text == "취업률":
+                    self.jobData.employmentRate[c.find('item').text] = c.find('data').text
+                elif c.find('name').text == "졸업 후 첫 직장 월평균 임금":
+                    self.jobData.salary[c.find('item').text] = c.find('data').text
+                elif c.find('name').text == "첫 직장 만족도":
+                    self.jobData.satisfaction[c.find('item').text] = c.find('data').text
+                elif c.find('name').text == "졸업 후 상황":
+                    self.jobData.afterGraduation[c.find('item').text] = c.find('data').text
+            if not (c.find('job') is None):
+                self.jobData.job = c.find('job').text
+            if not (c.find('qualifications') is None):
+                self.jobData.qualification = c.find('qualifications').text
 
-
-
-
-def MakeDataByMajor(major):
-    majorSeq = seqAndClass[major].seq
-    lst = MakeDataByMajorSeq(majorSeq)
-    if(lst.count == 0):
-        print("no Data")
-    print("<University Datas>")
-    for uni in lst[0]:
-        uni.show()
-    print("\n<Major Datas>")
-    lst[1].major = major
-    lst[1].show()
-    print('\n<Job Data>')
-    lst[2].show()
-    majorUniListDiction[major] = lst[0]
-    majorDataDiction[major] = lst[1]
+        self.UniList = UniqueList(self.UniList)
 
 
-def Loading():
-    global seqAndClass
-    seqAndClass = ExtractmClassAndMajorSeq()
-    for i in seqAndClass:
-        MakeDataByMajor(i)
-    dic = {"uni":majorUniListDiction , "major":majorDataDiction ,"job":jobDataDiction,'selectData':seqAndClass}
-    return dic
+
+
 
 
 
