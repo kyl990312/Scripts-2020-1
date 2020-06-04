@@ -24,6 +24,7 @@ def MakeTree(str):          # 요청변수를 받아 xml파일을 tree로 반환
     url = MakeURL(str)
     listXmlFile = RequestXML(url)
     #print(listXmlFile.decode('utf-8'))
+    print("make tree")
     tree = ElementTree.fromstring(listXmlFile)
     return tree
 
