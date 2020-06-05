@@ -22,6 +22,7 @@ import platform
 import logging as _logging
 import folium
 from tkinter import*
+import tkinter as tk
 
 # Fix for PyCharm hints warnings
 WindowUtils = cef.WindowUtils()
@@ -76,7 +77,6 @@ class MainFrame(tk.Frame):
 
         # Pack MainFrame
         self.pack(fill=tk.BOTH, expand=tk.YES)
-
 
 
     def on_root_configure(self, _):
