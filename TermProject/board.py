@@ -1,6 +1,16 @@
 from tkinter import *
 import map
 from loading import Data
+<<<<<<< Updated upstream
+=======
+from tkinter import *
+from urllib.parse import quote
+from urllib.request import Request, urlopen
+import requests
+import ssl
+import json
+
+>>>>>>> Stashed changes
 
 def checkLogger():
     map.logger.setLevel(map._logging.INFO)
@@ -69,15 +79,34 @@ def setLegion():
     checkList[6].grid(row=7, column=0)
 
 def getMap():
-    m = map.folium.Map(location=[37.564214, 127.001699],
+    # 검색할 주소
+    location = '서현동'
+
+    # Production(실제 서비스) 환경
+    URL = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC68wSjaTQgd3T9GfGDeNc3PD7W-OLZ4YE' \
+          '&sensor=false&language=ko&address={}'.format(location)
+
+    # URL로 보낸 Requst의 Response를 response 변수에 할당
+    response = requests.get(URL)
+
+    # JSON 파싱
+    data = response.json()
+
+    # lat, lon 추출
+    lat = data['results'][0]['geometry']['location']['lat']
+    lng = data['results'][0]['geometry']['location']['lng']
+
+    m = map.folium.Map(location=[lat, lng],
                        tiles="OpenStreetMap",
                        zoom_start=15)
 
-    map.folium.CircleMarker(location=[37.564214, 127.001699],
-                            radius=100,  # 원의 크기
+    map.folium.CircleMarker(location=[lat, lng],
+                            radius=10,  # 원의 크기
                             color="#000",  # 테두리색
                             fill_color="#fff",  # 채우기색
                             popup="Center of seoul").add_to(m)
+
+    map.folium.Marker([lat, lng], popup=location).add_to(m)
 
     m.save('D:/document/3-1/map.html')
 
