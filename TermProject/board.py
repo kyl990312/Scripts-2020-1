@@ -1,6 +1,11 @@
 import map
 from loading import Data
 from tkinter import *
+from urllib.parse import quote
+from urllib.request import Request, urlopen
+import requests
+import ssl
+import json
 
 listbox = None
 
@@ -34,8 +39,7 @@ def setUniFrame():
     Label(UniFrame, text="해당 과가 있는 학교", width=15, height=1).grid(row=8, column=0)
     listbox = Listbox(UniFrame, width=15, height=30)
     listbox.grid(row=9, column=0)
-    return listbox
-
+    Button(UniFrame, text="검색", command=SearchProcess).grid(row = 10, column = 0)
 def setFrame():
     frame0.grid(row=0, column=1)
     # 프레임 1 : 학교 정보 // 프레임 2 : 학과 정보 // 프레임 3 : 취업 정보
@@ -73,27 +77,66 @@ def setLegion():
     checkList[6].grid(row=7, column=0)
 
 def getMap():
-    m = map.folium.Map(location=[37.564214, 127.001699],
+    # 검색할 주소 선
+    # 선택한 대학교를 넣으면 됨
+    location = '서현동'
+
+    # Production(실제 서비스) 환경
+    URL = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC68wSjaTQgd3T9GfGDeNc3PD7W-OLZ4YE' \
+          '&sensor=false&language=ko&address={}'.format(location)
+
+    # URL로 보낸 Requst의 Response를 response 변수에 할당
+    response = requests.get(URL)
+
+    # JSON 파싱
+    data = response.json()
+
+    # lat, lon 추출
+    lat = data['results'][0]['geometry']['location']['lat']
+    lng = data['results'][0]['geometry']['location']['lng']
+
+    m = map.folium.Map(location=[lat, lng],
                        tiles="OpenStreetMap",
                        zoom_start=15)
 
-    map.folium.CircleMarker(location=[37.564214, 127.001699],
-                            radius=100,  # 원의 크기
+    map.folium.CircleMarker(location=[lat, lng],
+                            radius=10,  # 원의 크기
                             color="#000",  # 테두리색
                             fill_color="#fff",  # 채우기색
                             popup="Center of seoul").add_to(m)
 
-    m.save('map.html')          # 각자 파일경로로 수정필요
+    map.folium.Marker([lat, lng], popup=location).add_to(m)
+
+    m.save('map.html')
 
 def OKProcess(major):
-    datas.MakeUniversityData(major.get())              # 학과에 해당하는 대학정보를 만든다
-    InputUniVersityToList(datas.UniList)
+    datas.MakeUniversityData(major.get())   # 학과에 해당하는 대학정보를 만든다
+    if len(datas.UniDict) is 0:
+        return
+    InputUniVersityToList(datas.UniDict)
 
 def InputUniVersityToList(unilist):
-    applicableList = []
     idx = 0
     for n in unilist:
-        listbox.insert(idx,n.schoolName)
+        listbox.insert(idx,n)
+
+def SearchProcess():
+    # list에서 대학을 선택한후 "검색" 버튼을 눌렀을때 실행된다
+    # 선택한 항목을 튜플 (index, value) 값으로 받아온다.
+    selection = listbox.curselection()
+    # 대학을 선택하지 않고 "검색"을 누른경우는 return을 해 아무것도 실행하지 않도록 한다
+    if len(selection) is 0:
+        return
+
+    # 대학을 선택하고 버튼을 누른경우 학과와 직업 정보를 생성한다.
+    datas.MakeJobData()
+    datas.MakeMajorData()
+
+    # 선택한 list 항목의 대학이름이다
+    name = listbox.get(selection[0])
+
+    # 대학의 이름을 통해 datas.uniDict에 접근하여 대학 정보를 프레임에 띄워주면 된다.
+    datas.UniDict[name].show()
 
 def pressed(X):
     frames[X].tkraise()
@@ -151,4 +194,3 @@ if __name__ == '__main__':
     map.cef.Initialize()
     window.mainloop()
     map.cef.Shutdown()
-

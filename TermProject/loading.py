@@ -1,28 +1,18 @@
-from parsing import*
-from Datas import*
+from parsing import *
+from Datas import *
 
-def FindUniInList(uni,lst):
-    for l in lst:
-        if( uni.schoolName == l.schoolName) and (uni.campusName == l.campusName):
-            return True
-    return False
+import spam
 
-def UniqueList(lst):
-    uniUniqueList = []
-    for uni in lst:
-        if not FindUniInList(uni,uniUniqueList):
-            uniUniqueList.append(uni)
-    return uniUniqueList
 
 class Data:
     def __init__(self):
-        self.UniList= []  # 학과이름 : 학과가 있는 대학들의 정보
+        self.UniDict = {}  # 학과이름 : 학과가 있는 대학들의 정보
         self.majorData = None  # 학과이름 : 학과정보
         self.jobData = None  # 학과이름 : 취업정보
         self.seqAndClass = ExtractmClassAndMajorSeq()  # 학과이름 : listURL에 있던 학과정보
         self.tree = None
 
-    def MakeMajorData(self,major):
+    def MakeMajorData(self):
         self.majorData = Major()
         for c in self.tree.iter('content'):
             if not (c.find('SBJECT_NM') is None):
@@ -35,9 +25,7 @@ class Data:
                 if c.find('name').text == "졸업 후 첫 직업 분야":
                     self.majorData.graduates.append(c.find('item').text)
 
-
-
-    def MakeJobData(self,major):
+    def MakeJobData(self):
         print("loading...")
         self.jobData = Job()
         for c in self.tree.iter('content'):
@@ -56,14 +44,14 @@ class Data:
                 self.jobData.qualification = c.find('qualifications').text
             print('end')
 
-
-    def MakeUniversityData(self,major):
+    def MakeUniversityData(self, major):
         print("loading...")
+
         str = "&svcCode=MAJOR_VIEW&contentType=xml&gubun=univ_list&majorSeq=" + self.seqAndClass[major].seq
         self.tree = MakeTree(str)
         print("made tree")
 
-        self.UniList.clear()
+        self.UniDict.clear()
         for c in self.tree.iter('content'):
             if not (c.find('schoolName') is None):
                 uni = University()
@@ -75,17 +63,7 @@ class Data:
                 uni.schoolName = schoolName.text
                 uni.campusName = campusName.text
                 uni.url = url.text
-                self.UniList.append(uni)
-        self.UniList = UniqueList(self.UniList)
+                if (self.UniDict.get(uni.schoolName) is None) or (
+                        self.UniDict[schoolName.text].campusName != uni.campusName):
+                    self.UniDict[schoolName.text] = uni
         print("end")
-
-
-
-
-
-
-
-
-
-
-
