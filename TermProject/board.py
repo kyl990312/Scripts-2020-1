@@ -34,7 +34,8 @@ def setUniFrame():
     Label(UniFrame, text="해당 과가 있는 학교", width=15, height=1).grid(row=8, column=0)
     listbox = Listbox(UniFrame, width=15, height=30)
     listbox.grid(row=9, column=0)
-    Button(UniFrame, text="검색", command=SearchProcess).grid(row = 10, column = 0)
+    return listbox
+
 def setFrame():
     frame0.grid(row=0, column=1)
     # 프레임 1 : 학교 정보 // 프레임 2 : 학과 정보 // 프레임 3 : 취업 정보
@@ -85,33 +86,14 @@ def getMap():
     m.save('map.html')          # 각자 파일경로로 수정필요
 
 def OKProcess(major):
-    datas.MakeUniversityData(major.get())   # 학과에 해당하는 대학정보를 만든다
-    if len(datas.UniDict) is 0:
-        return
-    InputUniVersityToList(datas.UniDict)
+    datas.MakeUniversityData(major.get())              # 학과에 해당하는 대학정보를 만든다
+    InputUniVersityToList(datas.UniList)
 
 def InputUniVersityToList(unilist):
+    applicableList = []
     idx = 0
     for n in unilist:
-        listbox.insert(idx,n)
-
-def SearchProcess():
-    # list에서 대학을 선택한후 "검색" 버튼을 눌렀을때 실행된다
-    # 선택한 항목을 튜플 (index, value) 값으로 받아온다.
-    selection = listbox.curselection()
-    # 대학을 선택하지 않고 "검색"을 누른경우는 return을 해 아무것도 실행하지 않도록 한다
-    if len(selection) is 0:
-        return
-
-    # 대학을 선택하고 버튼을 누른경우 학과와 직업 정보를 생성한다.
-    datas.MakeJobData()
-    datas.MakeMajorData()
-
-    # 선택한 list 항목의 대학이름이다
-    name = listbox.get(selection[0])
-
-    # 대학의 이름을 통해 datas.uniDict에 접근하여 대학 정보를 프레임에 띄워주면 된다.
-    datas.UniDict[name].show()
+        listbox.insert(idx,n.schoolName)
 
 def pressed(X):
     frames[X].tkraise()
