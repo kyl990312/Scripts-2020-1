@@ -2,6 +2,8 @@ import map
 from loading import Data
 from tkinter import *
 
+listbox = None
+
 def checkLogger():
     map.logger.setLevel(map._logging.INFO)
     stream_handler = map._logging.StreamHandler()
@@ -26,11 +28,13 @@ def setMajorFrame():
     MajorFrame.grid(row=0, column=0)
 
 def setUniFrame():
+    global listbox
     UniFrame.grid(row=1, column=0)
     # 학교 이름
     Label(UniFrame, text="해당 과가 있는 학교", width=15, height=1).grid(row=8, column=0)
     listbox = Listbox(UniFrame, width=15, height=30)
     listbox.grid(row=9, column=0)
+    return listbox
 
 def setFrame():
     frame0.grid(row=0, column=1)
@@ -79,15 +83,17 @@ def getMap():
                             fill_color="#fff",  # 채우기색
                             popup="Center of seoul").add_to(m)
 
-    m.save('D:/document/3-1/map.html')
+    m.save('map.html')          # 각자 파일경로로 수정필요
 
 def OKProcess(major):
     datas.MakeUniversityData(major.get())              # 학과에 해당하는 대학정보를 만든다
-    InputUniVersityToList()
+    InputUniVersityToList(datas.UniList)
 
-def InputUniVersityToList():
+def InputUniVersityToList(unilist):
     applicableList = []
     idx = 0
+    for n in unilist:
+        listbox.insert(idx,n.schoolName)
 
 def pressed(X):
     frames[X].tkraise()
