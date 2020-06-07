@@ -6,8 +6,17 @@ from urllib.request import Request, urlopen
 import requests
 import ssl
 import json
+import spam
 
 listbox = None
+curMajor =''
+checkVal0=None
+checkVal1=None
+checkVal2=None
+checkVal3=None
+checkVal4=None
+checkVal5=None
+checkVal6=None
 
 def checkLogger():
     map.logger.setLevel(map._logging.INFO)
@@ -50,10 +59,11 @@ def setFrame():
         label = Label(frames[i], text="FRAME" + str(i), width=60, height=30)
         label.pack()
 
+
 def setLegion():
     # 지역 분류 : 0.서울 특별시, 1. 수도권: 경기도 + 인천, 2. 충청도, 3. 강원도, 4. 전라도 + 광주 + 대전, 5. 경상도 + 대구 + 부산, 6.제주특별자치구
     Label(UniFrame, text="지역", width=15).grid(row=2, column=0)
-
+    global checkVal0, checkVal1, checkVal2, checkVal3, checkVal4, checkVal5, checkVal6
     checkVal0 = IntVar()
     checkVal1 = IntVar()
     checkVal2 = IntVar()
@@ -109,16 +119,52 @@ def getMap():
 
     m.save('map.html')
 
+
 def OKProcess(major):
-    datas.MakeUniversityData(major.get())   # 학과에 해당하는 대학정보를 만든다
-    if len(datas.UniDict) is 0:
-        return
+    global curMajor
+    if major != curMajor:
+        datas.MakeUniversityData(major.get())   # 학과에 해당하는 대학정보를 만든다
+        if len(datas.UniDict) is 0:
+            return
+        for uni in datas.UniDict:
+            datas.UniDict[uni].show()
+        curMajor = major
+
     InputUniVersityToList(datas.UniDict)
 
+
 def InputUniVersityToList(unilist):
+    listbox.delete(0,listbox.size())
+    key =''
+    if checkVal0.get() == 1:
+        key += "서울특별시/세종특별자치시/"
+    if checkVal1.get() == 1:
+        key += "경기도/인천광역시/"
+    if checkVal2.get() == 1:
+        key += "충청북도/충청남도/"
+    if checkVal3.get() == 1:
+        key += "강원도/"
+    if checkVal4.get() == 1:
+        key += "전라북도/전라남도/대전광역시/광주광역시/"
+    if checkVal5.get() == 1:
+        key += "경상북도/경상남도/대구광역시/부산광역시/"
+    if checkVal6.get() == 1:
+        key += "제주특별시/"
+    lst = ''
+    for uni in unilist:
+        lst += (uni+ "/"+datas.UniDict[uni].area +"/")
+
+    if key != '':
+        lst = spam.select(key,lst)
+    else:
+        lst = spam.sort(lst)
+    nameLst = lst.split("/")
     idx = 0
-    for n in unilist:
-        listbox.insert(idx,n)
+    for n in nameLst:
+        if n != '':
+            listbox.insert(idx,n)
+            idx += 1
+
 
 def SearchProcess():
     # list에서 대학을 선택한후 "검색" 버튼을 눌렀을때 실행된다
