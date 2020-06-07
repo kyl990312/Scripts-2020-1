@@ -63,7 +63,20 @@ class Data:
                 uni.schoolName = schoolName.text
                 uni.campusName = campusName.text
                 uni.url = url.text
-                if (self.UniDict.get(uni.schoolName) is None) or (
-                        self.UniDict[schoolName.text].campusName != uni.campusName):
+                if (self.UniDict.get(uni.schoolName) is None ):
                     self.UniDict[schoolName.text] = uni
+                elif (self.UniDict[schoolName.text].campusName != uni.campusName):
+                    self.UniDict[schoolName.text + "("+uni.campusName+")"] = uni
+                    uni.schoolName += ("(" + uni.campusName + ")")
         print("end")
+
+
+
+
+
+
+
+
+
+
+
