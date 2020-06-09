@@ -8,7 +8,7 @@ import random
 class BlackJack:
     def __init__(self):
         self.window = Tk()
-        self.window.tile("Black Jack")
+        self.window.title("Black Jack")
         self.window.geometry("800x600")
 
         self.window.configure(bg = "green")
