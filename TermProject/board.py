@@ -9,6 +9,7 @@ from urllib.request import Request, urlopen
 import requests
 import ssl
 import json
+import os
 
 >>>>>>> Stashed changes
 
@@ -41,6 +42,10 @@ def setUniFrame():
     Label(UniFrame, text="해당 과가 있는 학교", width=15, height=1).grid(row=8, column=0)
     listbox = Listbox(UniFrame, width=15, height=30)
     listbox.grid(row=9, column=0)
+<<<<<<< Updated upstream
+=======
+    Button(UniFrame, text="검색", command=SearchProcess).grid(row = 10, column = 0)
+>>>>>>> Stashed changes
 
 def setFrame():
     frame0.grid(row=0, column=1)
@@ -78,13 +83,20 @@ def setLegion():
     checkList[5].grid(row=6, column=0)
     checkList[6].grid(row=7, column=0)
 
+<<<<<<< Updated upstream
 def getMap():
     # 검색할 주소
     location = '서현동'
+=======
+def getMap(name):
+    # 검색할 주소 선
+    # 선택한 대학교를 넣으면 됨
+    location = name
+>>>>>>> Stashed changes
 
     # Production(실제 서비스) 환경
     URL = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC68wSjaTQgd3T9GfGDeNc3PD7W-OLZ4YE' \
-          '&sensor=false&language=ko&address={}'.format(location)
+          '&sensor=false&language=ko&address={}'.format(name)
 
     # URL로 보낸 Requst의 Response를 response 변수에 할당
     response = requests.get(URL)
@@ -109,6 +121,15 @@ def getMap():
     map.folium.Marker([lat, lng], popup=location).add_to(m)
 
     m.save('D:/document/3-1/map.html')
+<<<<<<< Updated upstream
+=======
+
+def OKProcess(major):
+    datas.MakeUniversityData(major.get())   # 학과에 해당하는 대학정보를 만든다
+    if len(datas.UniDict) is 0:
+        return
+    InputUniVersityToList(datas.UniDict)
+>>>>>>> Stashed changes
 
 def setFrame():
     # 학과 이름
@@ -128,9 +149,15 @@ def setFrame():
         label = Label(frames[i], text="FRAME" + str(i), width=10, height=10)
         label.pack()
 
+<<<<<<< Updated upstream
 def OKProcess(major):
     datas.MakeUniversityData(major.get())              # 학과에 해당하는 대학정보를 만든다
     InputUniVersityToList()
+=======
+    # 선택한 list 항목의 대학이름이다
+    name = listbox.get(selection[0])
+    getMap(name)  # 지도 추출
+>>>>>>> Stashed changes
 
 def InputUniVersityToList():
     applicableList = []
@@ -172,6 +199,7 @@ def windowPlace():
     toplevel.overrideredirect(1)
 
 if __name__ == '__main__':
+<<<<<<< Updated upstream
     checkLogger()
     getMap()
 
@@ -186,6 +214,8 @@ if __name__ == '__main__':
 
     getMap()                    #지도 추출
 
+=======
+>>>>>>> Stashed changes
     checkLogger()               #버전과 컴퓨터 환경 확인
 
     window = Tk()               #윈도우 생성

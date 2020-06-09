@@ -39,8 +39,8 @@ logger = _logging.getLogger("tkinter_.py")
 # Tk 8.5 doesn't support png images
 IMAGE_EXT = ".png" if tk.TkVersion > 8.5 else ".gif"
 
-class MainFrame(tk.Frame):
 
+class MainFrame(tk.Frame):
     def __init__(self, root):
         self.browser_frame = None
         self.navigation_bar = None
@@ -77,7 +77,6 @@ class MainFrame(tk.Frame):
 
         # Pack MainFrame
         self.pack(fill=tk.BOTH, expand=tk.YES)
-
 
     def on_root_configure(self, _):
         logger.debug("MainFrame.on_root_configure")
