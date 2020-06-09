@@ -23,6 +23,9 @@ class Data:
             elif not (c.find('name') is None):
                 if c.find('name').text == "졸업 후 첫 직업 분야":
                     self.majorData.graduates.append(c.find('item').text)
+            elif not (c.find('name') is None):
+                if c.find('name').text == "입학상황(성별)":
+                    self.majorData.gender[c.find('item').text] = c.find('data').text
 
     def MakeJobData(self):
         print("loading...")

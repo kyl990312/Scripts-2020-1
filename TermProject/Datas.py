@@ -22,6 +22,7 @@ class Major:
         self.department =''     #세부 관련 학과
         self.main_subjects=[]   # 주요과목
         self.graduates =[]      # 졸업 후 취업 분야
+        self.gender = {}
 
     def show(self):
         print("major: {0}".format(self.major))
