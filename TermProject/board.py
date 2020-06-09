@@ -6,7 +6,6 @@ from urllib.request import Request, urlopen
 import requests
 import ssl
 import json
-import spam
 
 listbox = None
 curMajor =''
@@ -86,14 +85,14 @@ def setLegion():
     checkList[5].grid(row=6, column=0)
     checkList[6].grid(row=7, column=0)
 
-def getMap():
+def getMap(name):
     # 검색할 주소 선
     # 선택한 대학교를 넣으면 됨
     location = '서현동'
 
     # Production(실제 서비스) 환경
     URL = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC68wSjaTQgd3T9GfGDeNc3PD7W-OLZ4YE' \
-          '&sensor=false&language=ko&address={}'.format(location)
+          '&sensor=false&language=ko&address={}'.format(name)
 
     # URL로 보낸 Requst의 Response를 response 변수에 할당
     response = requests.get(URL)
@@ -117,7 +116,7 @@ def getMap():
 
     map.folium.Marker([lat, lng], popup=location).add_to(m)
 
-    m.save('map.html')
+    m.save('D:/document/3-1/map.html')
 
 
 def OKProcess(major):
@@ -154,10 +153,7 @@ def InputUniVersityToList(unilist):
     for uni in unilist:
         lst += (uni+ "/"+datas.UniDict[uni].area +"/")
 
-    if key != '':
-        lst = spam.select(key,lst)
-    else:
-        lst = spam.sort(lst)
+
     nameLst = lst.split("/")
     idx = 0
     for n in nameLst:
@@ -183,6 +179,7 @@ def SearchProcess():
 
     # 대학의 이름을 통해 datas.uniDict에 접근하여 대학 정보를 프레임에 띄워주면 된다.
     datas.UniDict[name].show()
+    getMap(name)  # 지도 추출
 
 def pressed(X):
     frames[X].tkraise()
@@ -216,8 +213,6 @@ def windowPlace():
     toplevel.overrideredirect(1)
 
 if __name__ == '__main__':
-    getMap()                    #지도 추출
-
     checkLogger()               #버전과 컴퓨터 환경 확인
 
     window = Tk()               #윈도우 생성

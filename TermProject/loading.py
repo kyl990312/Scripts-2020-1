@@ -1,7 +1,6 @@
 from parsing import *
 from Datas import *
 
-import spam
 
 
 class Data:
