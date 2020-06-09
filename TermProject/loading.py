@@ -1,12 +1,9 @@
 from parsing import *
 from Datas import *
 
-<<<<<<< HEAD
 import spam
 
 
-=======
->>>>>>> map
 class Data:
     def __init__(self):
         self.UniDict = {}  # 학과이름 : 학과가 있는 대학들의 정보
@@ -66,7 +63,6 @@ class Data:
                 uni.schoolName = schoolName.text
                 uni.campusName = campusName.text
                 uni.url = url.text
-<<<<<<< HEAD
                 if (self.UniDict.get(uni.schoolName) is None ):
                     self.UniDict[schoolName.text] = uni
                 elif (self.UniDict[schoolName.text].campusName != uni.campusName):
@@ -83,11 +79,3 @@ class Data:
 
 
 
-
-=======
-                if (self.UniDict.get(uni.schoolName) is None) or (
-                        self.UniDict[schoolName.text].campusName != uni.campusName):
-                    self.UniDict[schoolName.text] = uni
-        print("end")
-
->>>>>>> map
