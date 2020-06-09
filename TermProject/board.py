@@ -6,6 +6,7 @@ from urllib.request import Request, urlopen
 import requests
 import ssl
 import json
+import spam
 
 listbox = None
 curMajor =''
@@ -116,7 +117,7 @@ def getMap(name):
 
     map.folium.Marker([lat, lng], popup=location).add_to(m)
 
-    m.save('D:/document/3-1/map.html')
+    m.save('map.html')
 
 
 def OKProcess(major):
@@ -125,8 +126,6 @@ def OKProcess(major):
         datas.MakeUniversityData(major.get())   # 학과에 해당하는 대학정보를 만든다
         if len(datas.UniDict) is 0:
             return
-        for uni in datas.UniDict:
-            datas.UniDict[uni].show()
         curMajor = major
 
     InputUniVersityToList(datas.UniDict)
@@ -151,10 +150,13 @@ def InputUniVersityToList(unilist):
         key += "제주특별시/"
     lst = ''
     for uni in unilist:
-        lst += (uni+ "/"+datas.UniDict[uni].area +"/")
-
-
+        lst += (uni + "/" + datas.UniDict[uni].area + "/")
+    if key != '':
+        lst = spam.select(key, lst)
+    else:
+        lst = spam.sort(lst)
     nameLst = lst.split("/")
+
     idx = 0
     for n in nameLst:
         if n != '':
