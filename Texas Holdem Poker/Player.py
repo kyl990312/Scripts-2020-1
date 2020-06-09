@@ -15,9 +15,9 @@ class Player:
         self.cards.append(card)
         self.cardN+=1
 
-    def GetNoPairScore(self,cards):
+    def GetNoPairScore(self):
         mVal = 0
-        for i in cards:
+        for i in self.cards:
             if i.value > mVal:
                 mVal = i.value
                 if i.value == 1:

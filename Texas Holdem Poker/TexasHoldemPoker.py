@@ -35,11 +35,14 @@ class TexmasHoldemPoker:
 
         self.SetupBotton()
         self.SetLabel()
+        self.winLabel= None
+        self.playerScoreLabel= None
+        self.dealerScoreLabel= None
 
         self.window.mainloop()
 
     def SetupBotton(self):
-        self.checkButt = Button(self.window, text = 'Check', width = 6, height = 1, font= self.fontstyle2)
+        self.checkButt = Button(self.window, text = 'Check', width = 6, height = 1, font= self.fontstyle2,command = self.CheckProcess)
         self.checkButt.place(x = 50, y = 500)
         self.bet1Butt = Button(self.window, text = 'Bet x1',width = 6, height =1, font = self.fontstyle2,command = self.Betx1Process)
         self.bet1Butt.place(x = 150, y = 500)
@@ -65,6 +68,7 @@ class TexmasHoldemPoker:
         self.betLabel.place(x = 150, y = 450)
         self.moneyLabel = Label(text ='$'+str(self.player.ownMoney), width = 5, height = 1, font = self.fontstyle, bg= 'green', fg = 'cyan')
         self.moneyLabel.place(x = 650,y = 450)
+
 
     def DealProcess(self):
         # 첫번째 Deal
@@ -130,7 +134,7 @@ class TexmasHoldemPoker:
         #PlaySound('sounds/cardFlip1.wav', SND_FILENAME)
 
     def SetCommonCard(self):
-        idx = len(self.commonLCards)-1
+        idx = len(self.commonCards)-1
         p = PhotoImage(file = self.commonCards[idx].fileName)
         self.commonLCards.append(Label(self.window,image = p))
         self.commonLCards[idx].image = p
@@ -140,6 +144,10 @@ class TexmasHoldemPoker:
     def Betx1Process(self):
         # 플레이어 베팅금액 조정
         self.player.Bet(2)
+        if self.player.ownMoney<0:
+            self.player.ownMoney = 1000
+            self.Reset()
+
 
         if self.dealN == 6:
             self.EndGame()
@@ -163,6 +171,15 @@ class TexmasHoldemPoker:
     def Betx2Process(self):
         # 플레이어 베팅금액 조정
         self.player.Bet(3)
+        if self.player.ownMoney < 0:
+            self.player.ownMoney = 1000
+            self.player.betMoney = 0
+            self.bet1Butt['state'] = 'disabled'
+            self.bet1Butt['bg'] = 'gray'
+            self.bet2Butt['state'] = 'disabled'
+            self.bet2Butt['bg'] = 'gray'
+
+            return
 
         if self.dealN == 6:
             self.EndGame()
@@ -193,7 +210,6 @@ class TexmasHoldemPoker:
         p = PhotoImage(file=self.dealer.cards[1].fileName)
         self.dealerLCards[1].configure(image=p)
         self.dealerLCards[1].image = p
-
 
         self.player.cards += self.commonCards
         self.dealer.cards += self.commonCards
@@ -261,9 +277,12 @@ class TexmasHoldemPoker:
         if playerscore<dealerscore:
             self.win = "Win"
         elif playerscore == dealerscore:
-            if playerscore == 11:
-                if self.player.GetNoPairScore(self.commonCards) > self.dealer.GetNoPairScore(self.commonCards):
+            if playerscore == 12:
+                self.playerNum = self.player.GetNoPairScore()
+                self.dealerNum = self.dealer.GetNoPairScore()
+                if self.playerNum > self.dealerNum:
                     self.win = "Win"
+
                 else:
                     self.win = 'Push'
             elif playerscore == 3:
@@ -375,12 +394,12 @@ class TexmasHoldemPoker:
 
     def CheckPoker(self,cards,tag):
         cardVals = [c.value for c in cards]
-        for i in range(13):
+        for i in range(13,0,-1):
             if cardVals.count(i+1) == 4:
                 if tag == 0:
-                    self.playerNum = i+1
+                    self.playerNum = i
                 else:
-                    self.dealerNum = i+1
+                    self.dealerNum = i
                 return True
         return False
 
@@ -389,18 +408,18 @@ class TexmasHoldemPoker:
         n = 0
         cnt1 = 0
         cnt2 = 0
-        for i in range(13):
+        for i in range(13,0,-1):
             if cardVals.count(i + 1) == 3:
                 cnt1= 3
-                n = i+1
+                n = i
                 if tag == 0:
-                    self.playerNum = i+1
+                    self.playerNum = i
                 else:
-                    self.dealerNum = i+1
+                    self.dealerNum = i
                 break
 
-        for i in range(n,13,1):
-            if cardVals.count(i + 1) == 2:
+        for i in range(n,0,-1):
+            if cardVals.count(i) == 2:
                 cnt2 = 2
                 break
 
@@ -476,24 +495,25 @@ class TexmasHoldemPoker:
 
     def CheckTriple(self,cards,tag):
         cardVals = [c.value for c in cards]
-        for i in range(12,0,-1):
-            if cardVals.count(i + 1) == 3:
+        for i in range(13,0,-1):
+            if cardVals.count(i) == 3:
                 if tag == 0:
-                    self.playerNum = i + 1
+                    self.playerNum = i
                 else:
-                    self.dealerNum = i + 1
+                    self.dealerNum = i
                 return True
         return False
 
     def CheckTwoPair(self,cards,tag):
         cardVals = [c.value for c in cards]
         cnt= 0
-        for i in range(12, 0, -1):
-            if cardVals.count(i + 1) == 2:
-                if tag == 0:
-                    self.playerNum = i + 1
-                else:
-                    self.dealerNum = i + 1
+        for i in range(13, 0, -1):
+            if cardVals.count(i) == 2:
+                if(cnt == 0):
+                    if tag == 0:
+                        self.playerNum = i
+                    else:
+                        self.dealerNum = i
                 cnt += 1
         if cnt >=2 :
             return True
@@ -501,12 +521,12 @@ class TexmasHoldemPoker:
 
     def CheckOnePair(self,cards,tag):
         cardVals = [c.value for c in cards]
-        for i in range(12, 0, -1):
-            if cardVals.count(i + 1) == 2:
+        for i in range(13, 0, -1):
+            if cardVals.count(i) == 2:
                 if tag == 0:
-                    self.playerNum = i + 1
+                    self.playerNum = i
                 else:
-                    self.dealerNum = i + 1
+                    self.dealerNum = i
                 return True
         return False
 
@@ -528,9 +548,13 @@ class TexmasHoldemPoker:
         for l in self.playerLCards:
             l.destroy()
         self.playerLCards.clear()
-        self.winLabel.destroy()
-        self.playerScoreLabel.destroy()
-        self.dealerScoreLabel.destroy()
+
+        if not self.winLabel is None:
+            self.winLabel.destroy()
+        if not self.playerScoreLabel is None:
+            self.playerScoreLabel.destroy()
+        if not self.dealerScoreLabel is None:
+            self.dealerScoreLabel.destroy()
 
         # 버튼 리셋
         self.againButt['state'] = 'disabled'
@@ -543,16 +567,11 @@ class TexmasHoldemPoker:
         self.cards = [i for i in range(4 * 13)]
         random.shuffle(self.cards)
         self.cardN = 0
+        self.commonCards.clear()
 
-
-
-
-
-
-
-
-
-
+    def CheckProcess(self):
+        self.player.ownMoney += self.player.betMoney
+        self.Reset()
 
 
 TexmasHoldemPoker()
