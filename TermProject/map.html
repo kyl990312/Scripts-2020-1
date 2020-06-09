@@ -23,7 +23,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_facbb45f6565480b894887d3a52d8627 {
+                #map_7e1e7070bc5e42348f29f16fda3aa12c {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -35,15 +35,15 @@
 </head>
 <body>    
     
-            <div class="folium-map" id="map_facbb45f6565480b894887d3a52d8627" ></div>
+            <div class="folium-map" id="map_7e1e7070bc5e42348f29f16fda3aa12c" ></div>
         
 </body>
 <script>    
     
-            var map_facbb45f6565480b894887d3a52d8627 = L.map(
-                "map_facbb45f6565480b894887d3a52d8627",
+            var map_7e1e7070bc5e42348f29f16fda3aa12c = L.map(
+                "map_7e1e7070bc5e42348f29f16fda3aa12c",
                 {
-                    center: [37.564214, 127.001699],
+                    center: [35.1223596, 129.1017249],
                     crs: L.CRS.EPSG3857,
                     zoom: 15,
                     zoomControl: true,
@@ -55,26 +55,45 @@
 
         
     
-            var tile_layer_c858354c369a442ba41c20a805a06c39 = L.tileLayer(
+            var tile_layer_de8bdfe47e1a47d7bc2dfe245dcd3041 = L.tileLayer(
                 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            ).addTo(map_facbb45f6565480b894887d3a52d8627);
+            ).addTo(map_7e1e7070bc5e42348f29f16fda3aa12c);
         
     
-            var circle_marker_8cedb33c01234bd1a755847da36ab06f = L.circleMarker(
-                [37.564214, 127.001699],
-                {"bubblingMouseEvents": true, "color": "#000", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fff", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 100, "stroke": true, "weight": 3}
-            ).addTo(map_facbb45f6565480b894887d3a52d8627);
+            var circle_marker_4b3d487e4aef4c37915916ba4656d332 = L.circleMarker(
+                [35.1223596, 129.1017249],
+                {"bubblingMouseEvents": true, "color": "#000", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#fff", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(map_7e1e7070bc5e42348f29f16fda3aa12c);
         
     
-        var popup_c9be2f5b49584c839b0d43d7333d1d89 = L.popup({"maxWidth": "100%"});
+        var popup_49f16302f22e46a3ae2f8a1b37288d51 = L.popup({"maxWidth": "100%"});
 
         
-            var html_96ddbae63ec146089d300dc93f7ad990 = $(`<div id="html_96ddbae63ec146089d300dc93f7ad990" style="width: 100.0%; height: 100.0%;">Center of seoul</div>`)[0];
-            popup_c9be2f5b49584c839b0d43d7333d1d89.setContent(html_96ddbae63ec146089d300dc93f7ad990);
+            var html_b0e93215b7ee47ca89e540f6d4e3bb43 = $(`<div id="html_b0e93215b7ee47ca89e540f6d4e3bb43" style="width: 100.0%; height: 100.0%;">Center of seoul</div>`)[0];
+            popup_49f16302f22e46a3ae2f8a1b37288d51.setContent(html_b0e93215b7ee47ca89e540f6d4e3bb43);
         
 
-        circle_marker_8cedb33c01234bd1a755847da36ab06f.bindPopup(popup_c9be2f5b49584c839b0d43d7333d1d89)
+        circle_marker_4b3d487e4aef4c37915916ba4656d332.bindPopup(popup_49f16302f22e46a3ae2f8a1b37288d51)
+        ;
+
+        
+    
+    
+            var marker_99cc7ebb107140358922bc7552205f2c = L.marker(
+                [35.1223596, 129.1017249],
+                {}
+            ).addTo(map_7e1e7070bc5e42348f29f16fda3aa12c);
+        
+    
+        var popup_e1ff41ffe97249eea1eee5044ed5e740 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_9ada2ec5994e4d93a509ff5c832d6bf8 = $(`<div id="html_9ada2ec5994e4d93a509ff5c832d6bf8" style="width: 100.0%; height: 100.0%;">동명대학교</div>`)[0];
+            popup_e1ff41ffe97249eea1eee5044ed5e740.setContent(html_9ada2ec5994e4d93a509ff5c832d6bf8);
+        
+
+        marker_99cc7ebb107140358922bc7552205f2c.bindPopup(popup_e1ff41ffe97249eea1eee5044ed5e740)
         ;
 
         

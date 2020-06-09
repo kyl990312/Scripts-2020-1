@@ -1,22 +1,17 @@
+from tkinter import *
 import map
 from loading import Data
+<<<<<<< Updated upstream
+=======
 from tkinter import *
 from urllib.parse import quote
 from urllib.request import Request, urlopen
 import requests
 import ssl
 import json
-import spam
+import os
 
-listbox = None
-curMajor =''
-checkVal0=None
-checkVal1=None
-checkVal2=None
-checkVal3=None
-checkVal4=None
-checkVal5=None
-checkVal6=None
+>>>>>>> Stashed changes
 
 def checkLogger():
     map.logger.setLevel(map._logging.INFO)
@@ -42,13 +37,16 @@ def setMajorFrame():
     MajorFrame.grid(row=0, column=0)
 
 def setUniFrame():
-    global listbox
     UniFrame.grid(row=1, column=0)
     # 학교 이름
     Label(UniFrame, text="해당 과가 있는 학교", width=15, height=1).grid(row=8, column=0)
     listbox = Listbox(UniFrame, width=15, height=30)
     listbox.grid(row=9, column=0)
+<<<<<<< Updated upstream
+=======
     Button(UniFrame, text="검색", command=SearchProcess).grid(row = 10, column = 0)
+>>>>>>> Stashed changes
+
 def setFrame():
     frame0.grid(row=0, column=1)
     # 프레임 1 : 학교 정보 // 프레임 2 : 학과 정보 // 프레임 3 : 취업 정보
@@ -59,11 +57,10 @@ def setFrame():
         label = Label(frames[i], text="FRAME" + str(i), width=60, height=30)
         label.pack()
 
-
 def setLegion():
     # 지역 분류 : 0.서울 특별시, 1. 수도권: 경기도 + 인천, 2. 충청도, 3. 강원도, 4. 전라도 + 광주 + 대전, 5. 경상도 + 대구 + 부산, 6.제주특별자치구
     Label(UniFrame, text="지역", width=15).grid(row=2, column=0)
-    global checkVal0, checkVal1, checkVal2, checkVal3, checkVal4, checkVal5, checkVal6
+
     checkVal0 = IntVar()
     checkVal1 = IntVar()
     checkVal2 = IntVar()
@@ -86,14 +83,20 @@ def setLegion():
     checkList[5].grid(row=6, column=0)
     checkList[6].grid(row=7, column=0)
 
+<<<<<<< Updated upstream
 def getMap():
+    # 검색할 주소
+    location = '서현동'
+=======
+def getMap(name):
     # 검색할 주소 선
     # 선택한 대학교를 넣으면 됨
-    location = '서현동'
+    location = name
+>>>>>>> Stashed changes
 
     # Production(실제 서비스) 환경
     URL = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC68wSjaTQgd3T9GfGDeNc3PD7W-OLZ4YE' \
-          '&sensor=false&language=ko&address={}'.format(location)
+          '&sensor=false&language=ko&address={}'.format(name)
 
     # URL로 보낸 Requst의 Response를 response 변수에 할당
     response = requests.get(URL)
@@ -117,72 +120,48 @@ def getMap():
 
     map.folium.Marker([lat, lng], popup=location).add_to(m)
 
-    m.save('map.html')
-
+    m.save('D:/document/3-1/map.html')
+<<<<<<< Updated upstream
+=======
 
 def OKProcess(major):
-    global curMajor
-    if major != curMajor:
-        datas.MakeUniversityData(major.get())   # 학과에 해당하는 대학정보를 만든다
-        if len(datas.UniDict) is 0:
-            return
-        for uni in datas.UniDict:
-            datas.UniDict[uni].show()
-        curMajor = major
-
-    InputUniVersityToList(datas.UniDict)
-
-
-def InputUniVersityToList(unilist):
-    listbox.delete(0,listbox.size())
-    key =''
-    if checkVal0.get() == 1:
-        key += "서울특별시/세종특별자치시/"
-    if checkVal1.get() == 1:
-        key += "경기도/인천광역시/"
-    if checkVal2.get() == 1:
-        key += "충청북도/충청남도/"
-    if checkVal3.get() == 1:
-        key += "강원도/"
-    if checkVal4.get() == 1:
-        key += "전라북도/전라남도/대전광역시/광주광역시/"
-    if checkVal5.get() == 1:
-        key += "경상북도/경상남도/대구광역시/부산광역시/"
-    if checkVal6.get() == 1:
-        key += "제주특별시/"
-    lst = ''
-    for uni in unilist:
-        lst += (uni+ "/"+datas.UniDict[uni].area +"/")
-
-    if key != '':
-        lst = spam.select(key,lst)
-    else:
-        lst = spam.sort(lst)
-    nameLst = lst.split("/")
-    idx = 0
-    for n in nameLst:
-        if n != '':
-            listbox.insert(idx,n)
-            idx += 1
-
-
-def SearchProcess():
-    # list에서 대학을 선택한후 "검색" 버튼을 눌렀을때 실행된다
-    # 선택한 항목을 튜플 (index, value) 값으로 받아온다.
-    selection = listbox.curselection()
-    # 대학을 선택하지 않고 "검색"을 누른경우는 return을 해 아무것도 실행하지 않도록 한다
-    if len(selection) is 0:
+    datas.MakeUniversityData(major.get())   # 학과에 해당하는 대학정보를 만든다
+    if len(datas.UniDict) is 0:
         return
+    InputUniVersityToList(datas.UniDict)
+>>>>>>> Stashed changes
 
-    # 대학을 선택하고 버튼을 누른경우 학과와 직업 정보를 생성한다.
-    datas.MakeJobData()
-    datas.MakeMajorData()
+def setFrame():
+    # 학과 이름
+    Label(window, text="학과 이름", width=15).grid(row=0, column=0)
+    # 학과 이름 입력
+    Entry(window, width=15).grid(row=1, column=0)
+    # 학과 이름 입력 후 오케이 버튼
+    Button(window, text="OK", width=5).grid(row=1, column=1)
+    # 학교 이름
+    Label(window, text="해당 과가 있는 학교", width=15).grid(row=2, column=0)
 
+    # 프레임 1 : 학교 정보 // 프레임 2 : 학과 정보 // 프레임 3 : 취업 정보
+    for i in range(3):
+        Button(frame0, text="Frame" + str(i), command=lambda X=i: pressed(X)).pack(side=LEFT)
+        frames.append(Frame(window))
+        frames[i].grid(row=3, column=2)
+        label = Label(frames[i], text="FRAME" + str(i), width=10, height=10)
+        label.pack()
+
+<<<<<<< Updated upstream
+def OKProcess(major):
+    datas.MakeUniversityData(major.get())              # 학과에 해당하는 대학정보를 만든다
+    InputUniVersityToList()
+=======
     # 선택한 list 항목의 대학이름이다
     name = listbox.get(selection[0])
+    getMap(name)  # 지도 추출
+>>>>>>> Stashed changes
 
-    # 대학의 이름을 통해 datas.uniDict에 접근하여 대학 정보를 프레임에 띄워주면 된다.
-    datas.UniDict[name].show()
+def InputUniVersityToList():
+    applicableList = []
+    idx = 0
 
 def pressed(X):
     frames[X].tkraise()
@@ -193,8 +172,12 @@ def pressed(X):
         toplevel.withdraw()
 
 def windowPlace():
+    width_window = 800
+    height_window = 600
+
     width_window = 1000
     height_window = 800
+
     screen_width = window.winfo_screenwidth()
     screen_height = window.winfo_screenheight()
 
@@ -216,8 +199,23 @@ def windowPlace():
     toplevel.overrideredirect(1)
 
 if __name__ == '__main__':
+<<<<<<< Updated upstream
+    checkLogger()
+    getMap()
+
+    window = Tk()
+    toplevel = Toplevel(window, width=window.winfo_width(), height=window.winfo_height())
+
+    windowPlace()
+
+    frame0 = Frame(window)
+    frame0.grid(row=1, column=2)
+    frames = []
+
     getMap()                    #지도 추출
 
+=======
+>>>>>>> Stashed changes
     checkLogger()               #버전과 컴퓨터 환경 확인
 
     window = Tk()               #윈도우 생성
