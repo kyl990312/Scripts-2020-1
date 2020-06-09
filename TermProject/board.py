@@ -6,7 +6,8 @@ from urllib.request import Request, urlopen
 import requests
 import ssl
 import json
-import spam
+#import spam
+from PIL import Image,ImageTk
 
 listbox = None
 curMajor =''
@@ -17,6 +18,7 @@ checkVal3=None
 checkVal4=None
 checkVal5=None
 checkVal6=None
+
 
 def checkLogger():
     map.logger.setLevel(map._logging.INFO)
@@ -32,37 +34,44 @@ def checkLogger():
     sys.excepthook = map.cef.ExceptHook  # To shutdown all CEF processes on error
     # Tk must be initialized before CEF otherwise fatal error (Issue #306)
 
+
 def setMajorFrame():
     # 학과 이름 입력
-    Label(MajorFrame, text="학과 이름", width=15).grid(row=0, column=0)
+    majorL = Label(MajorFrame, text="학과 이름", bg='light goldenrod1')
+    majorL.grid(row=0, column=0)
     major = Entry(MajorFrame, width=15)
     major.grid(row=1, column=0)
     # 학과 이름 입력 후 오케이 버튼
-    Button(MajorFrame, text="OK", width=5, command=lambda X=major: OKProcess(X)).grid(row=1, column=1)
-    MajorFrame.grid(row=0, column=0)
+    Button(MajorFrame, text="OK", bg='light goldenrod1', width=5, command=lambda X=major: OKProcess(X)).grid(row=1, column=1)
+    MajorFrame.place(x=25, y=70)
+
 
 def setUniFrame():
     global listbox
-    UniFrame.grid(row=1, column=0)
+    UniFrame.place(x=25, y=260)
     # 학교 이름
-    Label(UniFrame, text="해당 과가 있는 학교", width=15, height=1).grid(row=8, column=0)
-    listbox = Listbox(UniFrame, width=15, height=30)
-    listbox.grid(row=9, column=0)
-    Button(UniFrame, text="검색", command=SearchProcess).grid(row = 10, column = 0)
+    Label(UniFrame, text="해당 과가 있는 학교", width=15, height=1, bg='light goldenrod1').grid(row=0, column=0)
+    listbox = Listbox(UniFrame, width=21, height=15)
+    listbox.grid(row=1, column=0)
+    Button(UniFrame, text="검색", bg='light goldenrod1', command=SearchProcess).grid(row = 2, column = 0)
+
+
 def setFrame():
-    frame0.grid(row=0, column=1)
+    frame0.place(x=220,y= 60)
     # 프레임 1 : 학교 정보 // 프레임 2 : 학과 정보 // 프레임 3 : 취업 정보
     for i in range(3):
-        Button(frame0, text="Frame" + str(i), command=lambda X=i: pressed(X)).pack(side=LEFT)
-        frames.append(Frame(window))
-        frames[i].grid(row=1, column=1)
-        label = Label(frames[i], text="FRAME" + str(i), width=60, height=30)
+        Button(frame0, text="Frame" + str(i),bg='sandy brown', command=lambda X=i: pressed(X)).pack(side=LEFT)
+        frames.append(Frame(window, relief = "solid", highlightbackground = "gray20", highlightcolor = "gray20", highlightthickness=10))
+        frames[i].place(x=220,y=85)
+        label = Label(frames[i], text="Frame" + str(i),bg='orange', width=77, height=30)
         label.pack()
 
 
 def setLegion():
     # 지역 분류 : 0.서울 특별시, 1. 수도권: 경기도 + 인천, 2. 충청도, 3. 강원도, 4. 전라도 + 광주 + 대전, 5. 경상도 + 대구 + 부산, 6.제주특별자치구
-    Label(UniFrame, text="지역", width=15).grid(row=2, column=0)
+    LegionFrame.place(x=25, y=130)
+
+    Label(LegionFrame, text="지역", width=15, bg='light goldenrod1').place(x = 12.5 , y=0)
     global checkVal0, checkVal1, checkVal2, checkVal3, checkVal4, checkVal5, checkVal6
     checkVal0 = IntVar()
     checkVal1 = IntVar()
@@ -71,26 +80,25 @@ def setLegion():
     checkVal4 = IntVar()
     checkVal5 = IntVar()
     checkVal6 = IntVar()
-    checkList = [Checkbutton(UniFrame, variable=checkVal0, width=5, height=1, text="서울"),
-                 Checkbutton(UniFrame, variable=checkVal1, width=5, height=1, text="수도권"),
-                 Checkbutton(UniFrame, variable=checkVal2, width=5, height=1, text="충청도"),
-                 Checkbutton(UniFrame, variable=checkVal3, width=5, height=1, text="강원도"),
-                 Checkbutton(UniFrame, variable=checkVal4, width=15, height=1, text="전라도,광주,대전"),
-                 Checkbutton(UniFrame, variable=checkVal5, width=15, height=1, text="경상도,대구,부산"),
-                 Checkbutton(UniFrame, variable=checkVal6, width=5, height=1, text="제주")]
-    checkList[0].grid(row=3, column=0)
-    checkList[1].grid(row=3, column=1)
-    checkList[2].grid(row=4, column=0)
-    checkList[3].grid(row=4, column=1)
-    checkList[4].grid(row=5, column=0)
-    checkList[5].grid(row=6, column=0)
-    checkList[6].grid(row=7, column=0)
+    checkList = [Checkbutton(LegionFrame, variable=checkVal0, text="서울", bg='light goldenrod1'),
+                 Checkbutton(LegionFrame, variable=checkVal1,  text="수도권", bg='light goldenrod1'),
+                 Checkbutton(LegionFrame, variable=checkVal2, text="충청도", bg='light goldenrod1'),
+                 Checkbutton(LegionFrame, variable=checkVal3, text="강원도", bg='light goldenrod1'),
+                 Checkbutton(LegionFrame, variable=checkVal4, text="전라도,광주,대전", bg='light goldenrod1'),
+                 Checkbutton(LegionFrame, variable=checkVal5,  text="경상도,대구,부산", bg='light goldenrod1'),
+                 Checkbutton(LegionFrame, variable=checkVal6,  text="제주", bg='light goldenrod1')]
+    checkList[0].place(x = 0 , y=20)
+    checkList[1].place(x = 70 , y=20)
+    checkList[2].place(x = 0 , y=40)
+    checkList[3].place(x = 70 , y=40)
+    checkList[4].place(x = 0 , y=60)
+    checkList[5].place(x = 0 , y=80)
+    checkList[6].place(x = 0 , y=100)
+
 
 def getMap(name):
     # 검색할 주소 선
     # 선택한 대학교를 넣으면 됨
-    location = '서현동'
-
     # Production(실제 서비스) 환경
     URL = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC68wSjaTQgd3T9GfGDeNc3PD7W-OLZ4YE' \
           '&sensor=false&language=ko&address={}'.format(name)
@@ -115,9 +123,9 @@ def getMap(name):
                             fill_color="#fff",  # 채우기색
                             popup="Center of seoul").add_to(m)
 
-    map.folium.Marker([lat, lng], popup=location).add_to(m)
+    map.folium.Marker([lat, lng], popup=name).add_to(m)
 
-    m.save('map.html')
+    m.save('D:\document\map.html')
 
 
 def OKProcess(major):
@@ -151,10 +159,10 @@ def InputUniVersityToList(unilist):
     lst = ''
     for uni in unilist:
         lst += (uni + "/" + datas.UniDict[uni].area + "/")
-    if key != '':
-        lst = spam.select(key, lst)
-    else:
-        lst = spam.sort(lst)
+    #if key != '':
+        #lst = spam.select(key, lst)
+    #else:
+        #lst = spam.sort(lst)
     nameLst = lst.split("/")
 
     idx = 0
@@ -182,6 +190,11 @@ def SearchProcess():
     # 대학의 이름을 통해 datas.uniDict에 접근하여 대학 정보를 프레임에 띄워주면 된다.
     datas.UniDict[name].show()
     getMap(name)  # 지도 추출
+    Label(frames[0], text = '학교 이름 : ' + name).place(x=350, y=30)
+    Label(frames[0], text = '위치 지역 : ' + datas.UniDict[name].area).place(x=350, y=50)
+    Label(frames[0], text = '캠퍼스 이름 : ' +datas.UniDict[name].campusName).place(x=350, y=70)
+    Label(frames[0], text='홈페이지 : ' +datas.UniDict[name].url).place(x=350, y=90)
+
 
 def pressed(X):
     frames[X].tkraise()
@@ -191,9 +204,10 @@ def pressed(X):
     else:
         toplevel.withdraw()
 
+
 def windowPlace():
-    width_window = 1000
-    height_window = 800
+    width_window = 800
+    height_window = 600
     screen_width = window.winfo_screenwidth()
     screen_height = window.winfo_screenheight()
 
@@ -214,23 +228,35 @@ def windowPlace():
 
     toplevel.overrideredirect(1)
 
+
 if __name__ == '__main__':
     checkLogger()               #버전과 컴퓨터 환경 확인
+    window = Tk()  # 윈도우 생성
+    window.configure(bg='LightGoldenrod1')
 
-    window = Tk()               #윈도우 생성
+    backImage = PhotoImage(file='back.png')
+    back = Label(window, image=backImage, bg='LightGoldenrod1')
+    back.place(x=0, y=0)
+
     toplevel = Toplevel(window, width=window.winfo_width(), height=window.winfo_height())#외부 윈도우 생성 // 지도 그리는 윈도우
     windowPlace()               #윈도우 배치
 
     datas = Data()  # 검색하는 학과의 정보를 담는다.
 
-    MajorFrame = Frame(window)
-    UniFrame = Frame(window)
+    blackImage = PhotoImage(file='black.png')
+    black = Label(window, image=blackImage, bg='gold', width = 180, height = 500)
+    black.place(x=10, y = 60)
+
+    MajorFrame = Frame(window, bg='light goldenrod1')
+    UniFrame = Frame(window, bg='light goldenrod1')
+    LegionFrame = Frame(window, width = 150, height= 120, bg='light goldenrod1')
+
     frame0 = Frame(window)
     frames = []
 
     setMajorFrame()
-    setUniFrame()
     setLegion()
+    setUniFrame()
     setFrame()
 
     map.MainFrame(toplevel)
