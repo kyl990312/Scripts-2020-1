@@ -84,7 +84,15 @@ class TexmasHoldemPoker:
             self.SetPlayerCard()
             self.DealPlayerCard()
             self.SetPlayerCard()
-        elif 0 < self.dealN < 6:
+        elif self.dealN == 1:
+            self.DealCommonCard()
+            self.SetCommonCard()
+            self.DealCommonCard()
+            self.SetCommonCard()
+            self.DealCommonCard()
+            self.SetCommonCard()
+
+        elif 1 < self.dealN < 4:
             # 공통 카드
             self.DealCommonCard()
             self.SetCommonCard()
@@ -123,7 +131,7 @@ class TexmasHoldemPoker:
         idx = len(self.dealerLCards)-1
         self.dealerLCards[idx].image = p
         self.dealerLCards[idx].place(x = 100*self.dealer.cardN + 50, y = 50)
-        #PlaySound('sounds/cardFlip1.wav',SND_FILENAME)
+        PlaySound('sounds/cardFlip1.wav',SND_FILENAME)
 
     def SetPlayerCard(self):
         p = PhotoImage(file=self.player.cards[self.player.cardN - 1].fileName)
@@ -131,7 +139,7 @@ class TexmasHoldemPoker:
         idx = len(self.playerLCards) - 1
         self.playerLCards[idx].image = p
         self.playerLCards[idx].place(x=100 * self.player.cardN + 50, y=350)
-        #PlaySound('sounds/cardFlip1.wav', SND_FILENAME)
+        PlaySound('sounds/cardFlip1.wav', SND_FILENAME)
 
     def SetCommonCard(self):
         idx = len(self.commonCards)-1
@@ -139,7 +147,7 @@ class TexmasHoldemPoker:
         self.commonLCards.append(Label(self.window,image = p))
         self.commonLCards[idx].image = p
         self.commonLCards[idx].place(x = 150 + idx*100,y = 200)
-        # PlaySound('sounds/cardFlip1.wav', SND_FILENAME)
+        PlaySound('sounds/cardFlip1.wav', SND_FILENAME)
 
     def Betx1Process(self):
         # 플레이어 베팅금액 조정
@@ -149,7 +157,7 @@ class TexmasHoldemPoker:
             self.Reset()
 
 
-        if self.dealN == 6:
+        if self.dealN == 4:
             self.EndGame()
             return
 
@@ -181,7 +189,7 @@ class TexmasHoldemPoker:
 
             return
 
-        if self.dealN == 6:
+        if self.dealN == 4:
             self.EndGame()
             return
 
