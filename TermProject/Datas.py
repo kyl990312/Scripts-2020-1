@@ -20,8 +20,8 @@ class Major:
         self.major =''      #학과이름
         self.subject =''       #학과 계열
         self.department =''     #세부 관련 학과
-        self.main_subjects=[]   # 주요과목
-        self.graduates =[]      # 졸업 후 취업 분야
+        self.main_subjects=''   # 주요과목
+        self.graduates = ''   # 졸업 후 취업 분야
         self.gender = {}
 
     def show(self):
@@ -30,6 +30,9 @@ class Major:
         print("department: {0}".format(self.department))
         print("main_subjects: {0}".format(self.main_subjects))
         print("graduates: {0}".format(self.graduates))
+        print("gender: ")
+        for i in self.gender:
+            print("{0} : {1}".format(i, self.gender[i]))
 
 class Job:
     def __init__(self):

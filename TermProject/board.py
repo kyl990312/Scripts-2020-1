@@ -6,8 +6,10 @@ from urllib.request import Request, urlopen
 import requests
 import ssl
 import json
-#import spam
+import spam
 from PIL import Image,ImageTk
+import graph        # 그래프를 그리는데 필요
+from tkinter import font
 
 listbox = None
 curMajor =''
@@ -59,11 +61,12 @@ def setUniFrame():
 def setFrame():
     frame0.place(x=220,y= 60)
     # 프레임 1 : 학교 정보 // 프레임 2 : 학과 정보 // 프레임 3 : 취업 정보
+    nameLst = ["학교 정보" , "학과 정보", "취업 정보"]
     for i in range(3):
-        Button(frame0, text="Frame" + str(i),bg='sandy brown', command=lambda X=i: pressed(X)).pack(side=LEFT)
+        Button(frame0, text=nameLst[i],bg='sandy brown', command=lambda X=i: pressed(X)).pack(side=LEFT)
         frames.append(Frame(window, relief = "solid", highlightbackground = "gray20", highlightcolor = "gray20", highlightthickness=10))
         frames[i].place(x=220,y=85)
-        label = Label(frames[i], text="Frame" + str(i),bg='orange', width=77, height=30)
+        label = Label(frames[i],bg='orange', width=77, height=30)
         label.pack()
 
 
@@ -125,16 +128,28 @@ def getMap(name):
 
     map.folium.Marker([lat, lng], popup=name).add_to(m)
 
-    m.save('D:\document\map.html')
+    m.save('map.html')
 
 
 def OKProcess(major):
+    print(major)
     global curMajor
     if major != curMajor:
+        print("make {0} data...".format(major))
         datas.MakeUniversityData(major.get())   # 학과에 해당하는 대학정보를 만든다
         if len(datas.UniDict) is 0:
             return
         curMajor = major
+
+        # 학과와 직업 정보를 생성한다.
+        datas.MakeJobData()
+        datas.MakeMajorData()
+        
+        # 학과 정보를 프레임에 띄워준다
+        SetMajorDataToFrame()
+
+        # 취업 정보를 프레임에 띄워준다
+        SetJobDataToFrame()
 
     InputUniVersityToList(datas.UniDict)
 
@@ -157,12 +172,14 @@ def InputUniVersityToList(unilist):
     if checkVal6.get() == 1:
         key += "제주특별시/"
     lst = ''
-    for uni in unilist:
-        lst += (uni + "/" + datas.UniDict[uni].area + "/")
-    #if key != '':
-        #lst = spam.select(key, lst)
-    #else:
-        #lst = spam.sort(lst)
+    if key != '':
+        for uni in unilist:
+            lst += (uni + "/" + datas.UniDict[uni].area + "/")
+        lst = spam.select(key, lst)
+    else:
+        for uni in unilist:
+            lst += (uni + "/" )
+        lst = spam.sort(lst)
     nameLst = lst.split("/")
 
     idx = 0
@@ -180,20 +197,73 @@ def SearchProcess():
     if len(selection) is 0:
         return
 
-    # 대학을 선택하고 버튼을 누른경우 학과와 직업 정보를 생성한다.
-    datas.MakeJobData()
-    datas.MakeMajorData()
-
     # 선택한 list 항목의 대학이름이다
     name = listbox.get(selection[0])
 
     # 대학의 이름을 통해 datas.uniDict에 접근하여 대학 정보를 프레임에 띄워주면 된다.
-    datas.UniDict[name].show()
     getMap(name)  # 지도 추출
-    Label(frames[0], text = '학교 이름 : ' + name).place(x=350, y=30)
-    Label(frames[0], text = '위치 지역 : ' + datas.UniDict[name].area).place(x=350, y=50)
-    Label(frames[0], text = '캠퍼스 이름 : ' +datas.UniDict[name].campusName).place(x=350, y=70)
-    Label(frames[0], text='홈페이지 : ' +datas.UniDict[name].url).place(x=350, y=90)
+    fontStyle = font.Font(frames[0],size = 9,family = 'Consolas')
+    Label(frames[0], text = '학교 이름 : ' + name,bg = 'orange',font = fontStyle).place(x=350, y=30)
+    Label(frames[0], text = '위치 지역 : ' + datas.UniDict[name].area,bg = 'orange',font = fontStyle).place(x=350, y=50)
+    Label(frames[0], text = '캠퍼스 이름 : ' +datas.UniDict[name].campusName,bg = 'orange',font = fontStyle).place(x=350, y=70)
+    Label(frames[0], text='홈페이지 : ' +datas.UniDict[name].url,bg = 'orange',font = fontStyle).place(x=350, y=90)
+
+
+def SetMajorDataToFrame():
+    fontStyle = font.Font(frames[1], size=9, family='Consolas')         # 폰트를 설정해 준다
+    # text 정보를 넣어준다
+    Label(frames[1], text="학과 이름 : " + datas.major, bg='orange', font=fontStyle).place(x=20, y=30)
+    Label(frames[1], text='학과 계열 : ' + datas.majorData.subject, bg='orange', font=fontStyle).place(x=20, y=50)
+    Label(frames[1], text="세부 관련 학과", bg='orange', font=fontStyle).place(x=20, y=70)
+    Label(frames[1], text=datas.majorData.department, bg='orange', font=fontStyle, wraplength=250).place(x=30, y=90)
+    ly = 90 + len(datas.majorData.department) // 26 * 20
+    print(ly)
+    Label(frames[1], text="주요 과목", font=fontStyle, bg='orange').place(x=20, y=300)
+    Label(frames[1], text=datas.majorData.main_subjects, bg='orange', font=fontStyle, wraplength=500).place(x=30, y=320)
+    ly += 40 + len(datas.majorData.main_subjects) // 26 * 20
+    print(ly)
+    Label(frames[1], text="졸업 후 진출 분야", font=fontStyle, bg='orange').place(x=20, y=370)
+    Label(frames[1], text=datas.majorData.graduates, bg='orange', font=fontStyle, wraplength=500).place(x=30, y=390)
+
+    # 입학상황에대한 그래프를 만든다
+    g = graph.Graph(frames[1], 'orange', 200, 200, datas.majorData.gender, 320, 70, '')
+    g.DrawCircleGraph( ['sky blue', 'salmon'], 'gender')
+    Label(frames[1],text = "입학상황 성비 그래프",bg= 'orange',font = fontStyle).place(x = 350, y =270)
+
+def SetJobDataToFrame():
+    fontStyle = font.Font(frames[2], size=9, family='Consolas')
+
+    # 취업률 그래프를 만들어 그린다
+    employRateG = graph.Graph(frames[2],'orange',150,150,datas.jobData.employmentRate,20,10,'')
+    employRateG.DrawVerticalGraph(['MediumPurple1','LightPink2','SkyBlue2'],'employ')
+    Label(frames[2], text="취업률 그래프", bg='orange', font=fontStyle).place(x=80, y=180)
+
+    #만족도
+    satisG = graph.Graph(frames[2],'orange',200,100,datas.jobData.satisfaction,20,210,'')
+    satisG.DrawHorisontalGraph(['DarkOrchid4','DarkOrchid1','SlateBlue1','RoyalBlue1','SteelBlue1'],'satisfaction')
+    Label(frames[2], text="첫 직장 만족도", bg='orange', font=fontStyle).place(x=80, y=310)
+
+    # 상황
+    satisG = graph.Graph(frames[2], 'orange', 200, 100, datas.jobData.afterGraduation, 20, 330, '')
+    satisG.DrawHorisontalGraph(['gray', 'red', 'SlateBlue1'],'afterGraduate')
+    Label(frames[2], text="졸업 후 상황", bg='orange', font=fontStyle).place(x=80, y=430)
+
+    # 임금
+    gData = {}
+    for i in datas.jobData.salary:
+        gData[i] = datas.jobData.salary[i]
+    lst = [i for i in datas.jobData.salary]
+    del(gData[lst[0]])
+    salary = graph.Graph(frames[2], 'orange', 200, 200, gData, 300, 20, '')
+    salary.DrawCircleGraph(['sky blue', 'salmon','gray','pink','red'], 'salary')
+    Label(frames[2],text = "평균 : " + datas.jobData.salary[lst[0]],bg = 'orange',font = fontStyle).place(x = 340,y = 220)
+    Label(frames[2], text="임금 그래프", bg='orange', font=fontStyle).place(x=380, y=240)
+
+    # 기타 정보
+    Label(frames[2],text = '관련 직업',bg = 'orange',font = fontStyle).place(x = 230, y = 260)
+    Label(frames[2], text= datas.jobData.job, bg='orange', font=fontStyle, wraplength = 300).place(x=240, y=280)
+    Label(frames[2],text = '관련 자격', bg = 'orange',font = fontStyle).place(x = 230, y = 360 )
+    Label(frames[2],text = datas.jobData.qualification, bg = 'orange',font = fontStyle,wraplength = 300).place(x = 240, y = 380)
 
 
 def pressed(X):

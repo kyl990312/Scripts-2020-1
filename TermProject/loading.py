@@ -10,22 +10,25 @@ class Data:
         self.jobData = None  # 학과이름 : 취업정보
         self.seqAndClass = ExtractmClassAndMajorSeq()  # 학과이름 : listURL에 있던 학과정보
         self.tree = None
+        self.major = ''
 
     def MakeMajorData(self):
         self.majorData = Major()
+        self.majorData.subject = self.seqAndClass[self.major].sbject
+        self.majorData.major = self.major
         for c in self.tree.iter('content'):
             if not (c.find('SBJECT_NM') is None):
                 subject = c.find('SBJECT_NM')
-                self.majorData.main_subjects.append(subject.text)
+                self.majorData.main_subjects +=(subject.text + ', ')
             elif not (c.find('department') is None):
                 department = c.find('department')
                 self.majorData.department = department.text
             elif not (c.find('name') is None):
                 if c.find('name').text == "졸업 후 첫 직업 분야":
-                    self.majorData.graduates.append(c.find('item').text)
-            elif not (c.find('name') is None):
-                if c.find('name').text == "입학상황(성별)":
+                    self.majorData.graduates += (c.find('item').text + ', ')
+                elif c.find('name').text == "입학상황(성별)":
                     self.majorData.gender[c.find('item').text] = c.find('data').text
+
 
     def MakeJobData(self):
         print("loading...")
@@ -48,7 +51,7 @@ class Data:
 
     def MakeUniversityData(self, major):
         print("loading...")
-
+        self.major = major
         str = "&svcCode=MAJOR_VIEW&contentType=xml&gubun=univ_list&majorSeq=" + self.seqAndClass[major].seq
         self.tree = MakeTree(str)
         print("made tree")
