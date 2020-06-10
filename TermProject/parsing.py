@@ -45,7 +45,7 @@ def ExtractmClassAndMajorSeq():
 
     contentTree = MakeTree('&svcCode=MAJOR&contentType=xml&gubun=univ_list&subject=100392')
     contentElements = contentTree.iter('content')
-    dict = {}
+
     for content in contentElements:
         data = listURLData()
         mClass = content.find("mClass")
@@ -59,7 +59,7 @@ def ExtractmClassAndMajorSeq():
 
     contentTree = MakeTree('&svcCode=MAJOR&contentType=xml&gubun=univ_list&subject=100393')
     contentElements = contentTree.iter('content')
-    dict = {}
+
     for content in contentElements:
         data = listURLData()
         mClass = content.find("mClass")
@@ -73,7 +73,7 @@ def ExtractmClassAndMajorSeq():
 
     contentTree = MakeTree('&svcCode=MAJOR&contentType=xml&gubun=univ_list&subject=100394')
     contentElements = contentTree.iter('content')
-    dict = {}
+
     for content in contentElements:
         data = listURLData()
         mClass = content.find("mClass")
@@ -87,7 +87,7 @@ def ExtractmClassAndMajorSeq():
 
     contentTree = MakeTree('&svcCode=MAJOR&contentType=xml&gubun=univ_list&subject=100395')
     contentElements = contentTree.iter('content')
-    dict = {}
+
     for content in contentElements:
         data = listURLData()
         mClass = content.find("mClass")
@@ -101,7 +101,7 @@ def ExtractmClassAndMajorSeq():
 
     contentTree = MakeTree('&svcCode=MAJOR&contentType=xml&gubun=univ_list&subject=100396')
     contentElements = contentTree.iter('content')
-    dict = {}
+
     for content in contentElements:
         data = listURLData()
         mClass = content.find("mClass")
@@ -115,7 +115,7 @@ def ExtractmClassAndMajorSeq():
 
     contentTree = MakeTree('&svcCode=MAJOR&contentType=xml&gubun=univ_list&subject=100397')
     contentElements = contentTree.iter('content')
-    dict = {}
+
     for content in contentElements:
         data = listURLData()
         mClass = content.find("mClass")

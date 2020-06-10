@@ -169,6 +169,9 @@ def OKProcess(major):
         # 학과와 직업 정보를 생성한다.
         datas.MakeJobData()
         datas.MakeMajorData()
+
+        datas.majorData.show()
+        datas.jobData.show()
         
         # 학과 정보를 프레임에 띄워준다
         SetMajorDataToFrame()
@@ -224,13 +227,12 @@ def SearchProcess():
 
     # 선택한 list 항목의 대학이름이다
     name = listbox.get(selection[0])
-
     global uniNameL, uniLocationL, uniCampusL, uniUrlL
     # 대학의 이름을 통해 datas.uniDict에 접근하여 대학 정보를 프레임에 띄워주면 된다.
     getMap(name)  # 지도 추출
     uniNameL.configure(text = '학교 이름 : ' + name)
     uniLocationL.configure(text = '위치 지역 : ' + datas.UniDict[name].area)
-    uniCampusL.confiture(text = '캠퍼스 이름 : ' +datas.UniDict[name].campusName)
+    uniCampusL.configure(text = '캠퍼스 이름 : ' +datas.UniDict[name].campusName)
     uniUrlL.configure(text='홈페이지 : ' +datas.UniDict[name].url)
 
 
