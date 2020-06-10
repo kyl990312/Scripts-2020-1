@@ -21,6 +21,32 @@ checkVal4=None
 checkVal5=None
 checkVal6=None
 
+uniNameL = None
+uniLocationL = None
+uniCampusL = None
+uniUrlL = None
+
+employRateG = None
+satisG = None
+aftergraduateG = None
+salary = None
+salaryL = None
+salaryGL = None
+jobL = None
+jobDataL = None
+qualificationL = None
+qualificationDataL = None
+
+majorNameL = None
+majorClassLm = None
+departmentL = None
+departmentDataL = None
+main_subjectL = None
+main_subjectDataL = None
+filedL = None
+filedDataL = None
+genderG = None
+
 
 def checkLogger():
     map.logger.setLevel(map._logging.INFO)
@@ -132,10 +158,9 @@ def getMap(name):
 
 
 def OKProcess(major):
-    print(major)
     global curMajor
-    if major != curMajor:
-        print("make {0} data...".format(major))
+    if major.get() != curMajor:
+        print("make {0} data...".format(major.get()))
         datas.MakeUniversityData(major.get())   # 학과에 해당하는 대학정보를 만든다
         if len(datas.UniDict) is 0:
             return
@@ -200,53 +225,41 @@ def SearchProcess():
     # 선택한 list 항목의 대학이름이다
     name = listbox.get(selection[0])
 
+    global uniNameL, uniLocationL, uniCampusL, uniUrlL
     # 대학의 이름을 통해 datas.uniDict에 접근하여 대학 정보를 프레임에 띄워주면 된다.
     getMap(name)  # 지도 추출
-    fontStyle = font.Font(frames[0],size = 9,family = 'Consolas')
-    Label(frames[0], text = '학교 이름 : ' + name,bg = 'orange',font = fontStyle).place(x=350, y=30)
-    Label(frames[0], text = '위치 지역 : ' + datas.UniDict[name].area,bg = 'orange',font = fontStyle).place(x=350, y=50)
-    Label(frames[0], text = '캠퍼스 이름 : ' +datas.UniDict[name].campusName,bg = 'orange',font = fontStyle).place(x=350, y=70)
-    Label(frames[0], text='홈페이지 : ' +datas.UniDict[name].url,bg = 'orange',font = fontStyle).place(x=350, y=90)
+    uniNameL.configure(text = '학교 이름 : ' + name)
+    uniLocationL.configure(text = '위치 지역 : ' + datas.UniDict[name].area)
+    uniCampusL.confiture(text = '캠퍼스 이름 : ' +datas.UniDict[name].campusName)
+    uniUrlL.configure(text='홈페이지 : ' +datas.UniDict[name].url)
 
 
 def SetMajorDataToFrame():
-    fontStyle = font.Font(frames[1], size=9, family='Consolas')         # 폰트를 설정해 준다
+    global majorNameL, majorClassLm, departmentL, departmentDataL, main_subjectL, main_subjectDataL, filedL, filedDataL, genderG
     # text 정보를 넣어준다
-    Label(frames[1], text="학과 이름 : " + datas.major, bg='orange', font=fontStyle).place(x=20, y=30)
-    Label(frames[1], text='학과 계열 : ' + datas.majorData.subject, bg='orange', font=fontStyle).place(x=20, y=50)
-    Label(frames[1], text="세부 관련 학과", bg='orange', font=fontStyle).place(x=20, y=70)
-    Label(frames[1], text=datas.majorData.department, bg='orange', font=fontStyle, wraplength=250).place(x=30, y=90)
-    ly = 90 + len(datas.majorData.department) // 26 * 20
-    print(ly)
-    Label(frames[1], text="주요 과목", font=fontStyle, bg='orange').place(x=20, y=300)
-    Label(frames[1], text=datas.majorData.main_subjects, bg='orange', font=fontStyle, wraplength=500).place(x=30, y=320)
-    ly += 40 + len(datas.majorData.main_subjects) // 26 * 20
-    print(ly)
-    Label(frames[1], text="졸업 후 진출 분야", font=fontStyle, bg='orange').place(x=20, y=370)
-    Label(frames[1], text=datas.majorData.graduates, bg='orange', font=fontStyle, wraplength=500).place(x=30, y=390)
+    majorNameL.configure(text="학과 이름 : " + datas.major)
+    majorClassLm.configure(text='학과 계열 : ' + datas.majorData.subject)
+    departmentDataL.configure(text=datas.majorData.department)
+    main_subjectDataL.configure(text=datas.majorData.main_subjects)
+    filedDataL.configure(text=datas.majorData.graduates)
 
     # 입학상황에대한 그래프를 만든다
-    g = graph.Graph(frames[1], 'orange', 200, 200, datas.majorData.gender, 320, 70, '')
-    g.DrawCircleGraph( ['sky blue', 'salmon'], 'gender')
-    Label(frames[1],text = "입학상황 성비 그래프",bg= 'orange',font = fontStyle).place(x = 350, y =270)
+    genderG.SetData(datas.majorData.gender)
+    genderG.DrawCircleGraph( ['sky blue', 'salmon'], 'gender')
 
 def SetJobDataToFrame():
-    fontStyle = font.Font(frames[2], size=9, family='Consolas')
-
+    global employRateG, satisG, aftergraduateG, salary, salaryL, jobL, jobDataL, qualificationL, qualificationDataL
     # 취업률 그래프를 만들어 그린다
-    employRateG = graph.Graph(frames[2],'orange',150,150,datas.jobData.employmentRate,20,10,'')
+    employRateG.SetData(datas.jobData.employmentRate)
     employRateG.DrawVerticalGraph(['MediumPurple1','LightPink2','SkyBlue2'],'employ')
-    Label(frames[2], text="취업률 그래프", bg='orange', font=fontStyle).place(x=80, y=180)
 
     #만족도
-    satisG = graph.Graph(frames[2],'orange',200,100,datas.jobData.satisfaction,20,210,'')
+    satisG.SetData(datas.jobData.satisfaction)
     satisG.DrawHorisontalGraph(['DarkOrchid4','DarkOrchid1','SlateBlue1','RoyalBlue1','SteelBlue1'],'satisfaction')
-    Label(frames[2], text="첫 직장 만족도", bg='orange', font=fontStyle).place(x=80, y=310)
 
     # 상황
-    satisG = graph.Graph(frames[2], 'orange', 200, 100, datas.jobData.afterGraduation, 20, 330, '')
-    satisG.DrawHorisontalGraph(['gray', 'red', 'SlateBlue1'],'afterGraduate')
-    Label(frames[2], text="졸업 후 상황", bg='orange', font=fontStyle).place(x=80, y=430)
+    aftergraduateG.SetData(datas.jobData.afterGraduation)
+    aftergraduateG.DrawHorisontalGraph(['gray', 'red', 'SlateBlue1'],'afterGraduate')
 
     # 임금
     gData = {}
@@ -254,17 +267,74 @@ def SetJobDataToFrame():
         gData[i] = datas.jobData.salary[i]
     lst = [i for i in datas.jobData.salary]
     del(gData[lst[0]])
-    salary = graph.Graph(frames[2], 'orange', 200, 200, gData, 300, 20, '')
+    salary.SetData(gData)
     salary.DrawCircleGraph(['sky blue', 'salmon','gray','pink','red'], 'salary')
-    Label(frames[2],text = "평균 : " + datas.jobData.salary[lst[0]],bg = 'orange',font = fontStyle).place(x = 340,y = 220)
-    Label(frames[2], text="임금 그래프", bg='orange', font=fontStyle).place(x=380, y=240)
+    salaryL.configure(text = "평균 : " + datas.jobData.salary[lst[0]])
 
     # 기타 정보
-    Label(frames[2],text = '관련 직업',bg = 'orange',font = fontStyle).place(x = 230, y = 260)
-    Label(frames[2], text= datas.jobData.job, bg='orange', font=fontStyle, wraplength = 300).place(x=240, y=280)
-    Label(frames[2],text = '관련 자격', bg = 'orange',font = fontStyle).place(x = 230, y = 360 )
-    Label(frames[2],text = datas.jobData.qualification, bg = 'orange',font = fontStyle,wraplength = 300).place(x = 240, y = 380)
+    jobDataL.configure( text= datas.jobData.job)
+    qualificationDataL.configure(text = datas.jobData.qualification)
 
+def MakeFrameDatas():
+    print("make frames...")
+    global uniNameL, uniLocationL, uniCampusL, uniUrlL
+    # 대학의 이름을 통해 datas.uniDict에 접근하여 대학 정보를 프레임에 띄워주면 된다.
+    fontStyle = font.Font(frames[0], size=9, family='Consolas')
+    uniNameL = Label(frames[0], text='학교 이름 : ', bg='orange', font=fontStyle)
+    uniNameL.place(x=350, y=30)
+    uniLocationL = Label(frames[0], text='위치 지역 : ', bg='orange', font=fontStyle)
+    uniLocationL.place(x=350, y=50)
+    uniCampusL = Label(frames[0], text='캠퍼스 이름 : ', bg='orange', font=fontStyle)
+    uniCampusL.place(x=350, y=70)
+    uniUrlL = Label(frames[0], text='홈페이지 : ', bg='orange', font=fontStyle)
+    uniUrlL.place(x=350, y=90)
+
+    # 취업정보 frame
+    fontStyle = font.Font(frames[2], size=9, family='Consolas')
+    global employRateG, satisG, aftergraduateG, salary, salaryL, salaryGL, jobL, jobDataL, qualificationL, qualificationDataL
+    # 취업률 그래프를 만들어 그린다
+    employRateG = graph.Graph(frames[2], 'orange', 150, 150, 20, 10, '')
+    Label(frames[2], text="취업률 그래프", bg='orange', font=fontStyle).place(x=80, y=180)
+    # 만족도
+    satisG = graph.Graph(frames[2], 'orange', 200, 100, 20, 210, '')
+    Label(frames[2], text="첫 직장 만족도", bg='orange', font=fontStyle).place(x=80, y=310)
+    # 상황
+    aftergraduateG = graph.Graph(frames[2], 'orange', 200, 100, 20, 330, '')
+    Label(frames[2], text="졸업 후 상황", bg='orange', font=fontStyle).place(x=80, y=430)
+    # 임금
+    salary = graph.Graph(frames[2], 'orange', 200, 200, 300, 20, '')
+    salaryL = Label(frames[2], text="평균 : ", bg='orange', font=fontStyle)
+    salaryL.place(x=340, y=220)
+    Label(frames[2], text="임금 그래프", bg='orange', font=fontStyle).place(x=380, y=240)
+    # 기타 정보
+    jobL = Label(frames[2], text='관련 직업', bg='orange', font=fontStyle)
+    jobL.place(x=230, y=260)
+    jobDataL = Label(frames[2], text='', bg='orange', font=fontStyle, wraplength=300)
+    jobDataL.place(x=240, y=280)
+    qualificationL = Label(frames[2], text='관련 자격', bg='orange', font=fontStyle)
+    qualificationL.place(x=230, y=360)
+    qualificationDataL = Label(frames[2], text='', bg='orange', font=fontStyle, wraplength=300)
+    qualificationDataL.place(x=240, y=380)
+
+    # 학과정보 Frame
+    global majorNameL, majorClassLm, departmentL,departmentDataL, main_subjectL,main_subjectDataL, filedL, filedDataL, genderG
+    fontStyle = font.Font(frames[1], size=9, family='Consolas')  # 폰트를 설정해 준다
+    # text 정보를 넣어준다
+    majorNameL = Label(frames[1], text="학과 이름 : ", bg='orange', font=fontStyle)
+    majorNameL.place(x=20, y=30)
+    majorClassLm=Label(frames[1], text='학과 계열 : ', bg='orange', font=fontStyle)
+    majorClassLm.place(x=20, y=50)
+    Label(frames[1], text="세부 관련 학과", bg='orange', font=fontStyle).place(x=20, y=70)
+    departmentDataL = Label(frames[1], text='', bg='orange', font=fontStyle, wraplength=250)
+    departmentDataL.place(x=30, y=90)
+    Label(frames[1], text="주요 과목", font=fontStyle, bg='orange').place(x=20, y=300)
+    main_subjectDataL= Label(frames[1], text='', bg='orange', font=fontStyle, wraplength=500)
+    main_subjectDataL.place(x=30, y=320)
+    Label(frames[1], text="졸업 후 진출 분야", font=fontStyle, bg='orange').place(x=20, y=370)
+    filedDataL = Label(frames[1], text='', bg='orange', font=fontStyle, wraplength=500)
+    filedDataL.place(x=30, y=390)
+    # 입학상황에대한 그래프를 만든다
+    genderG = graph.Graph(frames[1], 'orange', 200, 200, 320, 70, '')
 
 def pressed(X):
     frames[X].tkraise()
@@ -328,6 +398,7 @@ if __name__ == '__main__':
     setLegion()
     setUniFrame()
     setFrame()
+    MakeFrameDatas()
 
     map.MainFrame(toplevel)
     map.cef.Initialize()

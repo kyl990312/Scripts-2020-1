@@ -24,14 +24,97 @@ def MakeTree(str):          # 요청변수를 받아 xml파일을 tree로 반환
     url = MakeURL(str)
     listXmlFile = RequestXML(url)
     #print(listXmlFile.decode('utf-8'))
-    print("make tree")
     tree = ElementTree.fromstring(listXmlFile)
     return tree
 
 from Datas import *
 def ExtractmClassAndMajorSeq():
-    contentTree = MakeTree('&svcCode=MAJOR&contentType=xml&gubun=univ_list')
+    contentTree = MakeTree('&svcCode=MAJOR&contentType=xml&gubun=univ_list&subject=100391')
     contentElements= contentTree.iter('content')
+    dict = {}
+    for content in contentElements:
+        data = listURLData()
+        mClass = content.find("mClass")
+        majorSeq = content.find("majorSeq")
+        subject = content.find('lClass')
+
+        data.seq = majorSeq.text
+        data.sbject = subject.text
+
+        dict[mClass.text] = data
+
+    contentTree = MakeTree('&svcCode=MAJOR&contentType=xml&gubun=univ_list&subject=100392')
+    contentElements = contentTree.iter('content')
+    dict = {}
+    for content in contentElements:
+        data = listURLData()
+        mClass = content.find("mClass")
+        majorSeq = content.find("majorSeq")
+        subject = content.find('lClass')
+
+        data.seq = majorSeq.text
+        data.sbject = subject.text
+
+        dict[mClass.text] = data
+
+    contentTree = MakeTree('&svcCode=MAJOR&contentType=xml&gubun=univ_list&subject=100393')
+    contentElements = contentTree.iter('content')
+    dict = {}
+    for content in contentElements:
+        data = listURLData()
+        mClass = content.find("mClass")
+        majorSeq = content.find("majorSeq")
+        subject = content.find('lClass')
+
+        data.seq = majorSeq.text
+        data.sbject = subject.text
+
+        dict[mClass.text] = data
+
+    contentTree = MakeTree('&svcCode=MAJOR&contentType=xml&gubun=univ_list&subject=100394')
+    contentElements = contentTree.iter('content')
+    dict = {}
+    for content in contentElements:
+        data = listURLData()
+        mClass = content.find("mClass")
+        majorSeq = content.find("majorSeq")
+        subject = content.find('lClass')
+
+        data.seq = majorSeq.text
+        data.sbject = subject.text
+
+        dict[mClass.text] = data
+
+    contentTree = MakeTree('&svcCode=MAJOR&contentType=xml&gubun=univ_list&subject=100395')
+    contentElements = contentTree.iter('content')
+    dict = {}
+    for content in contentElements:
+        data = listURLData()
+        mClass = content.find("mClass")
+        majorSeq = content.find("majorSeq")
+        subject = content.find('lClass')
+
+        data.seq = majorSeq.text
+        data.sbject = subject.text
+
+        dict[mClass.text] = data
+
+    contentTree = MakeTree('&svcCode=MAJOR&contentType=xml&gubun=univ_list&subject=100396')
+    contentElements = contentTree.iter('content')
+    dict = {}
+    for content in contentElements:
+        data = listURLData()
+        mClass = content.find("mClass")
+        majorSeq = content.find("majorSeq")
+        subject = content.find('lClass')
+
+        data.seq = majorSeq.text
+        data.sbject = subject.text
+
+        dict[mClass.text] = data
+
+    contentTree = MakeTree('&svcCode=MAJOR&contentType=xml&gubun=univ_list&subject=100397')
+    contentElements = contentTree.iter('content')
     dict = {}
     for content in contentElements:
         data = listURLData()

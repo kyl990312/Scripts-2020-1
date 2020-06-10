@@ -9,7 +9,7 @@ import turtle
 
 
 class Graph:
-    def __init__(self,frame,bg,cWidth,cHeight,data , x, y,fileName):
+    def __init__(self,frame,bg,cWidth,cHeight , x, y,fileName):
         # frame : 그래프를 그릴 프레임/윈도우
         # x/y : 그래프가 그려질 위치
         # cWidth / cHeight : 그래프이 길이/ 높이
@@ -19,11 +19,9 @@ class Graph:
         self.width = cWidth
         self.height =cHeight
         self.frame = frame
-
-        # data를 list로 추출
-        self.items = [i for i in data]
-        self.vals = [eval(data[i]) for i in self.items]
-        self.maxVal = sum(self.vals)
+        self.items = []
+        self.vals = []
+        self.maxVal = 0
 
         # 캔버스 그리기
         self.canvas = Canvas(self.frame, bg=bg, width=cWidth, height=cHeight,bd = 0, highlightthickness = 0)
@@ -31,13 +29,24 @@ class Graph:
 
         # Email 전송시 필요한 그래프 image
         self.fileName = fileName
+
+    def SetData(self,data):
+        # data를 list로 추출
+        self.items.clear()
+        for i in data:
+            self.items.append(i)
+        self.vals.clear()
+        for i in data:
+            self.vals.append(eval(data[i]))
+        self.maxVal = sum(self.vals)
+
     def DrawVerticalGraph(self,sColors, tag ):
         self.fileName += '_VerticalGraph.jpg'
         # sWidth / sHeight : 막대바의 넓이/최대길이
         # fontstyle/ fsize : 캔버스의 폰트/폰트크기
         # sColors = [color , color, ...]의 item별 막대그래프의 색상리스트
         # tag: 캔버스의 tags
-
+        self.canvas.delete(tag)
         sWidth = self.width/len(self.items)
         sHeight = self.height * 3/4
         # 막대그래프 그리기
@@ -54,6 +63,7 @@ class Graph:
 
     def DrawHorisontalGraph(self, sColors, tag):
         self.fileName += '_HorizontalGraph.jpg'
+        self.canvas.delete(tag)
         # sWidth / sHeight : 막대바의 최대넓이/ 길이
         # sColors = [color , color, ...]의 item별 막대그래프의 색상리스트
         # tag: 캔버스의 tags
@@ -77,6 +87,7 @@ class Graph:
 
     def DrawCircleGraph(self ,sColors,tag):
         self.fileName += '_CircleGraph.jpg'
+        self.canvas.delete(tag)
         # r: 반지름
         # sColors = [color , color, ...]의 item별 막대그래프의 색상리스트
         # tag: 캔버스의 tags
@@ -94,7 +105,7 @@ class Graph:
                                     tags= tag)
             self.canvas.create_arc(self.width/2 - r,startY, self.width/2 + r , startY + 2*r,
                                    start = s,extent = e,fill = sColors[i],tags= tag)
-            s +=e
+            s += e
         pass
 
     def ConvertCanvasToImage(self):
