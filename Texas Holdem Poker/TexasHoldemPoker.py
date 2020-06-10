@@ -417,7 +417,7 @@ class TexmasHoldemPoker:
         cnt1 = 0
         cnt2 = 0
         for i in range(13,0,-1):
-            if cardVals.count(i + 1) == 3:
+            if cardVals.count(i) == 3:
                 cnt1= 3
                 n = i
                 if tag == 0:
@@ -488,8 +488,9 @@ class TexmasHoldemPoker:
         cardVals.sort()
         cnt = 0
         for i in range(len(cardVals) - 1):
-            if cardVals[i] + 1 != cardVals[i + 1]:
-                cnt = 0
+            if cardVals[i] + 1 != cardVals[i + 1] :
+                if cardVals[i] != cardVals[i + 1]:
+                    cnt = 0
             else:
                 cnt += 1
         if cnt > 4:
