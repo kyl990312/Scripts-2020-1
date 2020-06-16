@@ -2,14 +2,18 @@ import map
 from loading import Data
 from tkinter import *
 from urllib.parse import quote
-from urllib.request import Request, urlopen
+from urllib.request import Request
 import requests
 import ssl
 import json
-import spam
+#import spam
 from PIL import Image,ImageTk
 import graph        # 그래프를 그리는데 필요
 from tkinter import font
+from bs4 import BeautifulSoup as bs
+from urllib.request import urlopen
+from urllib.parse import quote_plus
+import brouser
 
 listbox = None
 curMajor =''
@@ -87,8 +91,8 @@ def setUniFrame():
 def setFrame():
     frame0.place(x=220,y= 60)
     # 프레임 1 : 학교 정보 // 프레임 2 : 학과 정보 // 프레임 3 : 취업 정보
-    nameLst = ["학교 정보" , "학과 정보", "취업 정보"]
-    for i in range(3):
+    nameLst = ["학교 정보" , "학과 정보", "취업 정보", "사람인"]
+    for i in range(4):
         Button(frame0, text=nameLst[i],bg='sandy brown', command=lambda X=i: pressed(X)).pack(side=LEFT)
         frames.append(Frame(window, relief = "solid", highlightbackground = "gray20", highlightcolor = "gray20", highlightthickness=10))
         frames[i].place(x=220,y=85)
@@ -156,6 +160,34 @@ def getMap(name):
 
     m.save('map.html')
 
+def findImage(name):
+    baseUrl = 'https://search.naver.com/search.naver?where=image&section=dic&query='
+    plusUrl = '&ie=utf8&sm=tab_kld'
+
+    url = baseUrl + quote_plus(name) + plusUrl# 한글 검색 자동 변환
+    html = urlopen(url)
+    soup = bs(html, "html.parser")
+    img = soup.find_all(class_='_img')
+
+    n = 1
+    c = 0
+
+    for i in img:
+        imgUrl = i['data-source']
+        with urlopen(imgUrl) as f:
+            with open('uni' + '.png', 'wb') as h:  # w - write b - binary
+                img = f.read()
+                h.write(img)
+        c += 1
+        if(c == n):
+            break
+
+    image = ImageTk.PhotoImage(Image.open("uni.png"))
+    a=Label(frames[0], image=image, height=100, width=200)
+    a.image = image
+    a.place(x=330, y= 120)
+    print('다운로드 완료')
+
 
 def OKProcess(major):
     global curMajor
@@ -203,11 +235,11 @@ def InputUniVersityToList(unilist):
     if key != '':
         for uni in unilist:
             lst += (uni + "/" + datas.UniDict[uni].area + "/")
-        lst = spam.select(key, lst)
+        #lst = spam.select(key, lst)
     else:
         for uni in unilist:
             lst += (uni + "/" )
-        lst = spam.sort(lst)
+        #lst = spam.sort(lst)
     nameLst = lst.split("/")
 
     idx = 0
@@ -234,6 +266,8 @@ def SearchProcess():
     uniLocationL.configure(text = '위치 지역 : ' + datas.UniDict[name].area)
     uniCampusL.configure(text = '캠퍼스 이름 : ' +datas.UniDict[name].campusName)
     uniUrlL.configure(text='홈페이지 : ' +datas.UniDict[name].url)
+
+    findImage(name)
 
 
 def SetMajorDataToFrame():
@@ -281,7 +315,7 @@ def MakeFrameDatas():
     print("make frames...")
     global uniNameL, uniLocationL, uniCampusL, uniUrlL
     # 대학의 이름을 통해 datas.uniDict에 접근하여 대학 정보를 프레임에 띄워주면 된다.
-    fontStyle = font.Font(frames[0], size=9, family='Consolas')
+    fontStyle = font.Font(frames[0], size=9, family='맑은 고딕')
     uniNameL = Label(frames[0], text='학교 이름 : ', bg='orange', font=fontStyle)
     uniNameL.place(x=350, y=30)
     uniLocationL = Label(frames[0], text='위치 지역 : ', bg='orange', font=fontStyle)
@@ -292,7 +326,7 @@ def MakeFrameDatas():
     uniUrlL.place(x=350, y=90)
 
     # 취업정보 frame
-    fontStyle = font.Font(frames[2], size=9, family='Consolas')
+    fontStyle = font.Font(frames[2], size=9, family='맑은 고딕')
     global employRateG, satisG, aftergraduateG, salary, salaryL, salaryGL, jobL, jobDataL, qualificationL, qualificationDataL
     # 취업률 그래프를 만들어 그린다
     employRateG = graph.Graph(frames[2], 'orange', 150, 150, 20, 10, '')
@@ -320,7 +354,7 @@ def MakeFrameDatas():
 
     # 학과정보 Frame
     global majorNameL, majorClassLm, departmentL,departmentDataL, main_subjectL,main_subjectDataL, filedL, filedDataL, genderG
-    fontStyle = font.Font(frames[1], size=9, family='Consolas')  # 폰트를 설정해 준다
+    fontStyle = font.Font(frames[1], size=9, family='맑은 고딕')  # 폰트를 설정해 준다
     # text 정보를 넣어준다
     majorNameL = Label(frames[1], text="학과 이름 : ", bg='orange', font=fontStyle)
     majorNameL.place(x=20, y=30)
@@ -346,6 +380,12 @@ def pressed(X):
     else:
         toplevel.withdraw()
 
+    if X == 3:
+        toplevel2.deiconify()
+        toplevel2.attributes('-topmost', 'true')
+    else:
+        toplevel2.withdraw()
+
 
 def windowPlace():
     width_window = 800
@@ -360,15 +400,26 @@ def windowPlace():
 
     width_window = 300
     height_window = 300
-    x_coord = (screen_width / 2) - (width_window / 2)
-    y_coord = (screen_height / 2) - (height_window / 2)
+    x_coord = (screen_width / 2) - ((window.winfo_x() + 300) / 2)
+    y_coord = (screen_height / 2) - ((window.winfo_y() + 300) / 2)
 
     toplevel.geometry("%dx%d+%d+%d"%(width_window, height_window, x_coord, y_coord))
 
-    window.resizable(0, 0)
-    toplevel.resizable(0, 0)
-
     toplevel.overrideredirect(1)
+    window.overrideredirect(1)
+
+    width_window = 500
+    height_window = 450
+    x_coord = (screen_width / 2) - ((window.winfo_x() + 300) / 2)
+    y_coord = (screen_height / 2) - ((window.winfo_y() + 410) / 2)
+
+    toplevel2.geometry("%dx%d+%d+%d" % (width_window, height_window, x_coord, y_coord))
+
+    toplevel2.overrideredirect(1)
+
+
+def esc(event):
+    window.destroy()
 
 
 if __name__ == '__main__':
@@ -381,8 +432,9 @@ if __name__ == '__main__':
     back.place(x=0, y=0)
 
     toplevel = Toplevel(window, width=window.winfo_width(), height=window.winfo_height())#외부 윈도우 생성 // 지도 그리는 윈도우
+    toplevel2 = Toplevel(window, width=window.winfo_width(), height=window.winfo_height())  # 외부 윈도우 생성 // 지도 그리는 윈도우
     windowPlace()               #윈도우 배치
-
+    window.bind("<Escape>", esc)
     datas = Data()  # 검색하는 학과의 정보를 담는다.
 
     blackImage = PhotoImage(file='black.png')
@@ -404,5 +456,7 @@ if __name__ == '__main__':
 
     map.MainFrame(toplevel)
     map.cef.Initialize()
+    brouser.MainFrame(toplevel2)
+    brouser.cef.Initialize()
     window.mainloop()
     map.cef.Shutdown()
