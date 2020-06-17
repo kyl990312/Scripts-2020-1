@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup as bs
 from urllib.request import urlopen
 from urllib.parse import quote_plus
 import brouser
+import mail
 
 listbox = None
 curMajor =''
@@ -98,6 +99,7 @@ def setFrame():
         frames[i].place(x=220,y=85)
         label = Label(frames[i],bg='orange', width=77, height=30)
         label.pack()
+    Button(window, text = '메일', command = sendMail, width=5, height=1, bg='sandy brown').place(x = 700, y= 20)
 
 
 def setLegion():
@@ -420,6 +422,12 @@ def windowPlace():
 
 def esc(event):
     window.destroy()
+
+
+def sendMail():
+    if datas.majorData:
+        m = mail.Mail()
+        m.SendMail(datas)
 
 
 if __name__ == '__main__':
