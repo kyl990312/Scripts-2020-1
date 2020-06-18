@@ -97,6 +97,7 @@ def setFrame():
         Button(frame0, text=nameLst[i],bg='sandy brown', command=lambda X=i: pressed(X)).pack(side=LEFT)
         frames.append(Frame(window, relief = "solid", highlightbackground = "gray20", highlightcolor = "gray20", highlightthickness=10))
         frames[i].place(x=220,y=85)
+        Scrollbar(frames[i]).pack(side="right", fill="y")
         label = Label(frames[i],bg='orange', width=77, height=30)
         label.pack()
     Button(window, text = '메일', command = sendMail, width=5, height=1, bg='sandy brown').place(x = 700, y= 20)
