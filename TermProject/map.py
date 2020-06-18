@@ -138,7 +138,7 @@ class BrowserFrame(tk.Frame):
         rect = [0, 0, 300, 300]
         window_info.SetAsChild(self.get_window_handle(), rect)
         self.browser = cef.CreateBrowserSync(window_info,
-                                             url="file:///D:/document/map.html") #todo
+                                             url="file:///map.html") #todo
         assert self.browser
         self.browser.SetClientHandler(LoadHandler(self))
         self.browser.SetClientHandler(FocusHandler(self))

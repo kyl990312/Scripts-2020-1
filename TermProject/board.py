@@ -1,6 +1,7 @@
 import map
 from loading import Data
 from tkinter import *
+from tkinter.messagebox import*
 from urllib.parse import quote
 from urllib.request import Request
 import requests
@@ -423,12 +424,23 @@ def windowPlace():
 def esc(event):
     window.destroy()
 
-
+box = None
+addr = None
 def sendMail():
+    global box, addr
+    box = Tk()
+    box.title("메일 보내기")
+    Label(box, text = "메일 주소를 입력해 주세요").place(x = 20, y = 10)
+    addr = Entry(box, width = 20)
+    addr.place(x = 20,y = 40)
+    Button(box,text = "send",command = Send).place(x = 70,y  = 70)
+def Send():
+    global box, mLabel
     if datas.majorData:
         m = mail.Mail()
-        m.SendMail(datas)
-
+        m.SendMail(datas,addr.get())
+    Label(box, text = "메일 전송을 완료했습니다!").place(x = 20,y = 120)
+    box.destroy()
 
 if __name__ == '__main__':
     checkLogger()               #버전과 컴퓨터 환경 확인
