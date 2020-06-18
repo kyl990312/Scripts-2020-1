@@ -6,7 +6,7 @@ from urllib.request import Request
 import requests
 import ssl
 import json
-#import spam
+import spam
 from PIL import Image,ImageTk
 import graph        # 그래프를 그리는데 필요
 from tkinter import font
@@ -237,11 +237,11 @@ def InputUniVersityToList(unilist):
     if key != '':
         for uni in unilist:
             lst += (uni + "/" + datas.UniDict[uni].area + "/")
-        #lst = spam.select(key, lst)
+        lst = spam.select(key, lst)
     else:
         for uni in unilist:
             lst += (uni + "/" )
-        #lst = spam.sort(lst)
+        lst = spam.sort(lst)
     nameLst = lst.split("/")
 
     idx = 0

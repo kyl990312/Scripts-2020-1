@@ -12,7 +12,7 @@ class Mail:
         senderAddr = "rhdiddlwls@gmail.com"
         recipientAddr = "rhdiddlwls@naver.com"
 
-        msg = MIMEMultipart();
+        msg = MIMEMultipart()
 
         msg['Subject'] = "취업 어디까지 알아봤니"
         msg['From'] = senderAddr
@@ -22,7 +22,7 @@ class Mail:
         HtmlPart = MIMEText(htmlFD.read(), 'html', _charset='UTF-8')
         htmlFD.close()
 
-        msg.attach(MIMEText("학과 : " +  datas.major, 'plain', _charset='utf-8'));
+        msg.attach(MIMEText("학과 : " +  datas.major, 'plain', _charset='utf-8'))
         msg.attach(MIMEText('학과 계열 : ' + datas.majorData.subject, 'plain', _charset="utf-8"))
         msg.attach(MIMEText('세부 학과 : ' + datas.majorData.department, 'plain', _charset="utf-8"))
 
