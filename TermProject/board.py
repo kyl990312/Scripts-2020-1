@@ -189,13 +189,11 @@ def findImage(name):
     a=Label(frames[0], image=image, height=100, width=200)
     a.image = image
     a.place(x=330, y= 120)
-    print('다운로드 완료')
 
 
 def OKProcess(major):
     global curMajor
     if major.get() != curMajor:
-        print("make {0} data...".format(major.get()))
         datas.MakeUniversityData(major.get())   # 학과에 해당하는 대학정보를 만든다
         if len(datas.UniDict) is 0:
             return
@@ -204,9 +202,6 @@ def OKProcess(major):
         # 학과와 직업 정보를 생성한다.
         datas.MakeJobData()
         datas.MakeMajorData()
-
-        datas.majorData.show()
-        datas.jobData.show()
         
         # 학과 정보를 프레임에 띄워준다
         SetMajorDataToFrame()
@@ -315,7 +310,6 @@ def SetJobDataToFrame():
     qualificationDataL.configure(text = datas.jobData.qualification)
 
 def MakeFrameDatas():
-    print("make frames...")
     global uniNameL, uniLocationL, uniCampusL, uniUrlL
     # 대학의 이름을 통해 datas.uniDict에 접근하여 대학 정보를 프레임에 띄워주면 된다.
     fontStyle = font.Font(frames[0], size=9, family='맑은 고딕')

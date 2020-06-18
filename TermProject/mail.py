@@ -7,7 +7,6 @@ class Mail:
     def SendMail(self, datas, addr):
         host = "smtp.gmail.com"
         port = "587"
-        htmlFileName = "map.html"
 
         senderAddr = "rhdiddlwls@gmail.com"
         recipientAddr = addr
@@ -17,10 +16,6 @@ class Mail:
         msg['Subject'] = "취업 어디까지 알아봤니"
         msg['From'] = senderAddr
         msg['To'] = recipientAddr
-
-        #htmlFD = open(htmlFileName, 'rb')
-        #HtmlPart = MIMEText(htmlFD.read(), 'html', _charset='UTF-8')
-        #htmlFD.close()
 
         msg.attach(MIMEText("학과 : " +  datas.major, 'plain', _charset='utf-8'))
         msg.attach(MIMEText('학과 계열 : ' + datas.majorData.subject, 'plain', _charset="utf-8"))

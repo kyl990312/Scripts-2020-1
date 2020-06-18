@@ -31,7 +31,6 @@ class Data:
 
 
     def MakeJobData(self):
-        print("loading...")
         self.jobData = Job()
         for c in self.tree.iter('content'):
             if not (c.find('name') is None):
@@ -47,14 +46,11 @@ class Data:
                 self.jobData.job = c.find('job').text
             if not (c.find('qualifications') is None):
                 self.jobData.qualification = c.find('qualifications').text
-            print('end')
 
     def MakeUniversityData(self, major):
-        print("loading...")
         self.major = major
         str = "&svcCode=MAJOR_VIEW&contentType=xml&gubun=univ_list&majorSeq=" + self.seqAndClass[major].seq
         self.tree = MakeTree(str)
-        print("made tree")
 
         self.UniDict.clear()
         for c in self.tree.iter('content'):
@@ -73,7 +69,7 @@ class Data:
                 elif (self.UniDict[schoolName.text].campusName != uni.campusName):
                     self.UniDict[schoolName.text + "("+uni.campusName+")"] = uni
                     uni.schoolName += ("(" + uni.campusName + ")")
-        print("end")
+
 
 
 

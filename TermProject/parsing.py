@@ -23,7 +23,6 @@ def MakeTree(str):          # 요청변수를 받아 xml파일을 tree로 반환
     # list xml 파싱
     url = MakeURL(str)
     listXmlFile = RequestXML(url)
-    #print(listXmlFile.decode('utf-8'))
     tree = ElementTree.fromstring(listXmlFile)
     return tree
 
@@ -137,5 +136,3 @@ def PasUniData():
         "Authorization": "KakaoAK 729569259cfcf6680016148bd34f19fb"
     }
     places = requests.get(url, headers=headers).json()['documents']
-
-    print(places)
