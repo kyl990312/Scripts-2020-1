@@ -270,8 +270,8 @@ class BlackJack:
     def checkWinner(self):
         for i in range(5):
             self.LcardsBack[i].destroy()
-            Label(self.window, text=str(self.dealer.cards[i].x), font=self.fontstyle2, bg="green", fg="white").place(
-                x=300 + 30*i, y=100)
+            self.dealerCardText.append(Label(self.window, text=str(self.dealer.cards[i].x), font=self.fontstyle2, bg="green", fg="white"))
+            self.dealerCardText[i].place( x=300 + 30*i, y=100)
 
         self.scoreText = ['']*4
         self.winText = ['']*4
@@ -628,6 +628,13 @@ class BlackJack:
                 self.playerCardText[i][self.madeIdx[i][0]].configure(fg = 'gold')
                 self.playerCardText[i][self.madeIdx[i][1]].configure(fg='gold')
                 self.playerCardText[i][self.madeIdx[i][2]].configure(fg='gold')
+        if len(self.madeIdx[3]) != 0:
+            self.LcardsDealer[self.madeIdx[3][0]].place(x=300 + self.madeIdx[3][0] * 30 , y=140)
+            self.LcardsDealer[self.madeIdx[3][1]].place(x=300 + self.madeIdx[3][1] * 30 , y=140)
+            self.LcardsDealer[self.madeIdx[3][2]].place(x=300 + self.madeIdx[3][2] * 30 , y=140)
+            self.dealerCardText[self.madeIdx[3][0]].configure(fg='gold')
+            self.dealerCardText[self.madeIdx[3][1]].configure(fg='gold')
+            self.dealerCardText[self.madeIdx[3][2]].configure(fg='gold')
 
         Label(self.window, text=self.scoreText[3], font=self.fontstyle, bg="green",
               fg="gold").place(x=300, y=60)
