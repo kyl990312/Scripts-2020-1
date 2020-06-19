@@ -14,13 +14,15 @@ class BlackJack:
 
         self.window.configure(bg = "green")
 
-        p = PhotoImage(file="GodoriCards/table.gif")
-        back = Label(self.window, image=p, height = 600, width = 1000)
-        back.image = p
-        back.pack()
+        #p = PhotoImage(file="GodoriCards/table.gif")
+        #back = Label(self.window, image=p, height = 600, width = 1000)
+        #back.image = p
+        #back.pack()
 
-        self.fontstyle = font.Font(self.window, size = 24, weight = 'bold',family='Consolas')
-        self.fontstyle2 = font.Font(self.window, size=16, weight='bold', family='Consolas')
+        self.textPos = []
+
+        self.fontstyle = font.Font(self.window, size = 20, weight = 'bold',family='Consolas')
+        self.fontstyle2 = font.Font(self.window, size=14, weight='bold', family='Consolas')
         self.LbetMoney = []
         self.setupButton()
         self.setupLabel()
@@ -47,33 +49,33 @@ class BlackJack:
     def setupButton(self):
         self.W5 = Button(self.window, text="5만", width=6, height=1, font=self.fontstyle2,
                           command=lambda X=0: self.pressedB5(X))
-        self.W5.place(x=50, y=500)
+        self.W5.place(x=50, y=520)
         self.W1 = Button(self.window, text="1만", width=6, height=1, font=self.fontstyle2,
                           command=lambda X=0: self.pressedB1(X))
-        self.W1.place(x=150, y=500)
+        self.W1.place(x=150, y=520)
 
 
         self.W52 = Button(self.window, text="5만", width=6, height=1, font=self.fontstyle2,
                          command=lambda X=1: self.pressedB5(X))
-        self.W52.place(x=300, y=500)
+        self.W52.place(x=300, y=520)
         self.W12 = Button(self.window, text="1만", width=6, height=1, font=self.fontstyle2,
                           command=lambda X=1: self.pressedB1(X))
-        self.W12.place(x=400, y=500)
+        self.W12.place(x=400, y=520)
 
 
         self.W53 = Button(self.window, text="5만", width=6, height=1, font=self.fontstyle2,
                          command=lambda X=2: self.pressedB5(X))
-        self.W53.place(x=550, y=500)
+        self.W53.place(x=550, y=520)
         self.W13 = Button(self.window, text="1만", width=6, height=1, font=self.fontstyle2,
                           command=lambda X=2: self.pressedB1(X))
-        self.W13    .place(x=650, y=500)
+        self.W13    .place(x=650, y=520)
 
         self.Deal = Button(self.window, text="Deal", width=6, height=1, font=self.fontstyle2,
                            command=self.pressedDeal)
-        self.Deal.place(x=800, y=500)
+        self.Deal.place(x=800, y=520)
         self.Again = Button(self.window, text="Again", width=6, height=1, font=self.fontstyle2,
                             command=self.pressedAgain)
-        self.Again.place(x=900, y=500)
+        self.Again.place(x=900, y=520)
 
         self.W5['state'] = 'disabled'
         self.W5['bg'] = 'gray'
@@ -95,16 +97,18 @@ class BlackJack:
         global playerMoney
 
         for i in range(3):
-            self.LbetMoney.append(Label(text="0만", width=4, height=1, font=self.fontstyle, bg="green", fg="cyan"))
-            self.LbetMoney[i].place(x=100 + 250*i, y=450)
-        self.LplayerMoney = Label(text=str(playerMoney) + '만', width=15, height=1, font=self.fontstyle, bg="green", fg="cyan")
-        self.LplayerMoney.place(x=700, y=450)
+            self.LbetMoney.append(Label(text="0만", width=4, height=1, font=self.fontstyle, bg="green", fg="gold"))
+            self.LbetMoney[i].place(x=100 + 250*i, y=480)
+        self.LplayerMoney = Label(text=str(playerMoney) + '만', width=15, height=1, font=self.fontstyle, bg="green", fg="gold")
+        self.LplayerMoney.place(x=700, y=480)
         self.LplayerPts = Label(text="", width=2, height=1, font=self.fontstyle2, bg="green", fg="white")
-        self.LplayerPts.place(x=300, y=300)
+        self.LplayerPts.place(x=300, y=320)
         self.LdealerPts = Label(text="", width=2, height=1, font=self.fontstyle2, bg="green", fg="white")
         self.LdealerPts.place(x=300, y=100)
         self.Lstatus = Label(text="", width=15, height=1, font=self.fontstyle, bg="green", fg="white")
-        self.Lstatus.place(x=500, y=300)
+        self.Lstatus.place(x=500, y=320)
+        #self.window.wm_attributes('-transparentcolor', 'green')
+
 
 
     def pressedB5(self, X):
@@ -154,10 +158,10 @@ class BlackJack:
                 self.LcardsPlayer[i].append(Label(self.window, image=p))
 
                 self.LcardsPlayer[i][self.player[i].inHand() - 1].image = p
-                self.LcardsPlayer[i][self.player[i].inHand() - 1].place(x=50 + i * 250, y=350)
+                self.LcardsPlayer[i][self.player[i].inHand() - 1].place(x=50 + i * 250, y=360)
 
-                self.playerCardText[i].append(Label(self.window, text=str(self.player[i].cards[0].x), font=self.fontstyle2, bg="green", fg="cyan"))
-                self.playerCardText[i][0].place(x=50 + i * 250, y=300)
+                self.playerCardText[i].append(Label(self.window, text=str(self.player[i].cards[0].x), font=self.fontstyle2, bg="green", fg="white"))
+                self.playerCardText[i][0].place(x=50 + i * 250, y=330)
 
             newCard = Card(self.cardDeck[self.deckN])
             self.deckN += 1
@@ -165,12 +169,12 @@ class BlackJack:
             p = PhotoImage(file="GodoriCards/" + newCard.filename())
             self.LcardsDealer.append(Label(self.window, image=p))
             self.LcardsDealer[self.dealer.inHand() - 1].image = p
-            self.LcardsDealer[self.dealer.inHand() - 1].place(x=300, y=100)
+            self.LcardsDealer[self.dealer.inHand() - 1].place(x=300, y=130)
 
             b = PhotoImage(file="GodoriCards/cardback.gif")
             self.LcardsBack.append(Label(self.window, image=b))
             self.LcardsBack[0].image = b
-            self.LcardsBack[0].place(x=300, y=100)
+            self.LcardsBack[0].place(x=300, y=130)
 
             PlaySound('sounds/cardFlip1.wav', SND_FILENAME)
 
@@ -184,12 +188,12 @@ class BlackJack:
                     self.LcardsPlayer[i].append(Label(self.window, image=p))
 
                     self.LcardsPlayer[i][self.player[i].inHand() - 1].image = p
-                    self.LcardsPlayer[i][self.player[i].inHand() - 1].place(x=80 + n*30 + i * 250, y=350)
+                    self.LcardsPlayer[i][self.player[i].inHand() - 1].place(x=80 + n*30 + i * 250, y=360)
 
                     self.playerCardText[i].append(
                         Label(self.window, text=str(self.player[i].cards[n+1].x), font=self.fontstyle2, bg="green",
-                              fg="cyan"))
-                    self.playerCardText[i][n+1].place(x=80 + n*30 + i * 250, y=300)
+                              fg="white"))
+                    self.playerCardText[i][n+1].place(x=80 + n*30 + i * 250, y=330)
 
             for i in range(3):
                 a = Card(self.cardDeck[self.deckN])
@@ -198,12 +202,12 @@ class BlackJack:
                 p = PhotoImage(file="GodoriCards/" + a.filename())
                 self.LcardsDealer.append(Label(self.window, image=p))
                 self.LcardsDealer[self.dealer.inHand() - 1].image = p
-                self.LcardsDealer[self.dealer.inHand() - 1].place(x=330 + 30*i, y=100)
+                self.LcardsDealer[self.dealer.inHand() - 1].place(x=330 + 30*i, y=130)
 
                 b = PhotoImage(file="GodoriCards/cardback.gif")
                 self.LcardsBack.append(Label(self.window, image=b))
                 self.LcardsBack[i+1].image = b
-                self.LcardsBack[i+1].place(x=330 + 30 * i, y=100)
+                self.LcardsBack[i+1].place(x=330 + 30 * i, y=130)
 
             PlaySound('sounds/cardFlip1.wav', SND_FILENAME)
 
@@ -216,12 +220,12 @@ class BlackJack:
                 self.LcardsPlayer[i].append(Label(self.window, image=p))
 
                 self.LcardsPlayer[i][self.player[i].inHand() - 1].image = p
-                self.LcardsPlayer[i][self.player[i].inHand() - 1].place(x=170 + i * 250, y=350)
+                self.LcardsPlayer[i][self.player[i].inHand() - 1].place(x=170 + i * 250, y=360)
 
                 self.playerCardText[i].append(
                     Label(self.window, text=str(self.player[i].cards[4].x), font=self.fontstyle2, bg="green",
-                          fg="cyan"))
-                self.playerCardText[i][4].place(x=170 + i * 250, y=300)
+                          fg="white"))
+                self.playerCardText[i][4].place(x=170 + i * 250, y=330)
 
             newCard = Card(self.cardDeck[self.deckN])
             self.deckN += 1
@@ -229,12 +233,12 @@ class BlackJack:
             p = PhotoImage(file="GodoriCards/" + newCard.filename())
             self.LcardsDealer.append(Label(self.window, image=p))
             self.LcardsDealer[self.dealer.inHand() - 1].image = p
-            self.LcardsDealer[self.dealer.inHand() - 1].place(x=420, y=100)
+            self.LcardsDealer[self.dealer.inHand() - 1].place(x=420, y=130)
 
             b = PhotoImage(file="GodoriCards/cardback.gif")
             self.LcardsBack.append(Label(self.window, image=b))
             self.LcardsBack[4].image = b
-            self.LcardsBack[4].place(x=420, y=100)
+            self.LcardsBack[4].place(x=420, y=130)
             PlaySound('sounds/cardFlip1.wav', SND_FILENAME)
 
         self.countDeal += 1
@@ -266,14 +270,17 @@ class BlackJack:
     def checkWinner(self):
         for i in range(5):
             self.LcardsBack[i].destroy()
-            Label(self.window, text=str(self.dealer.cards[i].x), font=self.fontstyle2, bg="green", fg="cyan").place(
-                x=300 + 30*i, y=0)
+            Label(self.window, text=str(self.dealer.cards[i].x), font=self.fontstyle2, bg="green", fg="white").place(
+                x=300 + 30*i, y=100)
 
         self.scoreText = ['']*4
+        self.winText = ['']*4
         self.intCards = [[],[],[],[]]
         self.score = [0] * 4
         self.scoreCheck = {100: '38광땡', 90: '광땡', 80: '땡', 70: '끗', 60: '망통'}
-
+        self.madeIdx = [[], [], [], []]
+        self.cardsVal = [[c.x for c in self.player[0].cards],[c.x for c in self.player[1].cards],
+                         [c.x for c in self.player[2].cards],[c.x for c in self.dealer.cards]]
         #도리짓고땡 족보
         for i in range(4):
             if(i<3):
@@ -287,49 +294,64 @@ class BlackJack:
             for j in range(4):
                 if (self.intCards[i][j] == 1):
                     if (self.intCards[i][j+1] == 1 and 8 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(1))
                         del cards[self.intCards[i].index(1)]
                         self.intCards[i].remove(1)
+                        self.madeIdx[i].append(self.cardsVal[i].index(1))
                         del cards[self.intCards[i].index(1)]
                         self.intCards[i].remove(1)
+                        self.madeIdx[i].append(self.cardsVal[i].index(8))
                         del cards[self.intCards[i].index(8)]
                         self.intCards[i].remove(8)
                         self.scoreText[i] += '콩콩팔'
                         break
                     if (2 in self.intCards[i] and 7 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(1))
                         del cards[self.intCards[i].index(1)]
                         self.intCards[i].remove(1)
+                        self.madeIdx[i].append(self.cardsVal[i].index(2))
                         del cards[self.intCards[i].index(2)]
                         self.intCards[i].remove(2)
+                        self.madeIdx[i].append(self.cardsVal[i].index(7))
                         del cards[self.intCards[i].index(7)]
                         self.intCards[i].remove(7)
                         self.scoreText[i] += '삐리칠'
                         break
 
                     if (3 in self.intCards[i] and 6 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(1))
                         del cards[self.intCards[i].index(1)]
                         self.intCards[i].remove(1)
+                        self.madeIdx[i].append(self.cardsVal[i].index(3))
                         del cards[self.intCards[i].index(3)]
                         self.intCards[i].remove(3)
+                        self.madeIdx[i].append(self.cardsVal[i].index(6))
                         del cards[self.intCards[i].index(6)]
                         self.intCards[i].remove(6)
                         self.scoreText[i] += '물삼육'
                         break
 
                     if (4 in self.intCards[i] and 5 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(1))
                         del cards[self.intCards[i].index(1)]
                         self.intCards[i].remove(1)
+                        self.madeIdx[i].append(self.cardsVal[i].index(4))
                         del cards[self.intCards[i].index(4)]
                         self.intCards[i].remove(4)
+                        self.madeIdx[i].append(self.cardsVal[i].index(5))
                         del cards[self.intCards[i].index(5)]
                         self.intCards[i].remove(5)
                         self.scoreText[i] += '빽새오'
                         break
 
                     if (9 in self.intCards[i] and 10 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(1))
                         del cards[self.intCards[i].index(1)]
                         self.intCards[i].remove(1)
+                        self.madeIdx[i].append(self.cardsVal[i].index(9))
                         del cards[self.intCards[i].index(9)]
                         self.intCards[i].remove(9)
+                        self.madeIdx[i].append(self.cardsVal[i].index(10))
                         del cards[self.intCards[i].index(10)]
                         self.intCards[i].remove(10)
                         self.scoreText[i] += '뺑구장'
@@ -337,30 +359,39 @@ class BlackJack:
 
                 if (self.intCards[i][j] == 2):
                     if (self.intCards[i][j+1] == 2 and 6 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(2))
                         del cards[self.intCards[i].index(2)]
                         self.intCards[i].remove(2)
+                        self.madeIdx[i].append(self.cardsVal[i].index(2))
                         del cards[self.intCards[i].index(2)]
                         self.intCards[i].remove(2)
+                        self.madeIdx[i].append(self.cardsVal[i].index(6))
                         del cards[self.intCards[i].index(6)]
                         self.intCards[i].remove(6)
                         self.scoreText[i] += '니니육'
                         break
 
                     if (3 in self.intCards[i] and 5 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(2))
                         del cards[self.intCards[i].index(2)]
                         self.intCards[i].remove(2)
+                        self.madeIdx[i].append(self.cardsVal[i].index(3))
                         del cards[self.intCards[i].index(3)]
                         self.intCards[i].remove(3)
+                        self.madeIdx[i].append(self.cardsVal[i].index(5))
                         del cards[self.intCards[i].index(5)]
                         self.intCards[i].remove(5)
                         self.scoreText[i] += '이삼오'
                         break
 
                     if (8 in self.intCards[i] and 10 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(2))
                         del cards[self.intCards[i].index(2)]
                         self.intCards[i].remove(2)
+                        self.madeIdx[i].append(self.cardsVal[i].index(8))
                         del cards[self.intCards[i].index(8)]
                         self.intCards[i].remove(8)
+                        self.madeIdx[i].append(self.cardsVal[i].index(10))
                         del cards[self.intCards[i].index(10)]
                         self.intCards[i].remove(10)
                         self.scoreText[i] += '이판장'
@@ -368,30 +399,39 @@ class BlackJack:
 
                 if (self.intCards[i][j] == 3):
                     if (self.intCards[i][j+1] == 3 and 4 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(3))
                         del cards[self.intCards[i].index(3)]
                         self.intCards[i].remove(3)
+                        self.madeIdx[i].append(self.cardsVal[i].index(3))
                         del cards[self.intCards[i].index(3)]
                         self.intCards[i].remove(3)
+                        self.madeIdx[i].append(self.cardsVal[i].index(4))
                         del cards[self.intCards[i].index(4)]
                         self.intCards[i].remove(4)
                         self.scoreText[i] += '심심새'
                         break
 
                     if (7 in self.intCards[i] and 10 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(3))
                         del cards[self.intCards[i].index(3)]
                         self.intCards[i].remove(3)
+                        self.madeIdx[i].append(self.cardsVal[i].index(7))
                         del cards[self.intCards[i].index(7)]
                         self.intCards[i].remove(7)
+                        self.madeIdx[i].append(self.cardsVal[i].index(10))
                         del cards[self.intCards[i].index(10)]
                         self.intCards[i].remove(10)
                         self.scoreText[i] += '삼칠장'
                         break
 
                     if (8 in self.intCards[i] and 9 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(3))
                         del cards[self.intCards[i].index(3)]
                         self.intCards[i].remove(3)
+                        self.madeIdx[i].append(self.cardsVal[i].index(8))
                         del cards[self.intCards[i].index(8)]
                         self.intCards[i].remove(8)
+                        self.madeIdx[i].append(self.cardsVal[i].index(9))
                         del cards[self.intCards[i].index(9)]
                         self.intCards[i].remove(9)
                         self.scoreText[i] += '삼빡구'
@@ -399,30 +439,39 @@ class BlackJack:
 
                 if (self.intCards[i][j] == 4):
                     if (self.intCards[i][j+1] == 4 and 2 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(4))
                         del cards[self.intCards[i].index(4)]
                         self.intCards[i].remove(4)
+                        self.madeIdx[i].append(self.cardsVal[i].index(4))
                         del cards[self.intCards[i].index(4)]
                         self.intCards[i].remove(4)
+                        self.madeIdx[i].append(self.cardsVal[i].index(2))
                         del cards[self.intCards[i].index(2)]
                         self.intCards[i].remove(2)
                         self.scoreText[i] += '살살이'
                         break
 
                     if (6 in self.intCards[i] and 9 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(4))
                         del cards[self.intCards[i].index(4)]
                         self.intCards[i].remove(4)
+                        self.madeIdx[i].append(self.cardsVal[i].index(6))
                         del cards[self.intCards[i].index(6)]
                         self.intCards[i].remove(6)
+                        self.madeIdx[i].append(self.cardsVal[i].index(9))
                         del cards[self.intCards[i].index(9)]
                         self.intCards[i].remove(9)
                         self.scoreText[i] += '사륙구'
                         break
 
                     if (7 in self.intCards[i] and 9 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(4))
                         del cards[self.intCards[i].index(4)]
                         self.intCards[i].remove(4)
+                        self.madeIdx[i].append(self.cardsVal[i].index(7))
                         del cards[self.intCards[i].index(7)]
                         self.intCards[i].remove(7)
+                        self.madeIdx[i].append(self.cardsVal[i].index(9))
                         del cards[self.intCards[i].index(9)]
                         self.intCards[i].remove(9)
                         self.scoreText[i] += '사칠구'
@@ -430,20 +479,26 @@ class BlackJack:
 
                 if (self.intCards[i][j] == 5):
                     if (6 in self.intCards[i] and 9 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(5))
                         del cards[self.intCards[i].index(5)]
                         self.intCards[i].remove(5)
+                        self.madeIdx[i].append(self.cardsVal[i].index(6))
                         del cards[self.intCards[i].index(6)]
                         self.intCards[i].remove(6)
+                        self.madeIdx[i].append(self.cardsVal[i].index(9))
                         del cards[self.intCards[i].index(9)]
                         self.intCards[i].remove(9)
                         self.scoreText[i] += '오륙구'
                         break
 
                     if (7 in self.intCards[i] and 8 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(5))
                         del cards[self.intCards[i].index(5)]
                         self.intCards[i].remove(5)
+                        self.madeIdx[i].append(self.cardsVal[i].index(7))
                         del cards[self.intCards[i].index(7)]
                         self.intCards[i].remove(7)
+                        self.madeIdx[i].append(self.cardsVal[i].index(8))
                         del cards[self.intCards[i].index(8)]
                         self.intCards[i].remove(8)
                         self.scoreText[i] += '오리발'
@@ -451,10 +506,13 @@ class BlackJack:
 
                 if (self.intCards[i][j] == 6):
                     if (self.intCards[i][j+1] == 6 and 8 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(6))
                         del cards[self.intCards[i].index(6)]
                         self.intCards[i].remove(6)
+                        self.madeIdx[i].append(self.cardsVal[i].index(6))
                         del cards[self.intCards[i].index(6)]
                         self.intCards[i].remove(6)
+                        self.madeIdx[i].append(self.cardsVal[i].index(8))
                         del cards[self.intCards[i].index(8)]
                         self.intCards[i].remove(8)
                         self.scoreText[i] += '쭉쭉팔'
@@ -462,10 +520,13 @@ class BlackJack:
 
                 if (self.intCards[i][j] == 7):
                     if (self.intCards[i][j+1] == 7 and 6 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(7))
                         del cards[self.intCards[i].index(7)]
                         self.intCards[i].remove(7)
+                        self.madeIdx[i].append(self.cardsVal[i].index(7))
                         del cards[self.intCards[i].index(7)]
                         self.intCards[i].remove(7)
+                        self.madeIdx[i].append(self.cardsVal[i].index(6))
                         del cards[self.intCards[i].index(6)]
                         self.intCards[i].remove(6)
                         self.scoreText[i] += '철철육'
@@ -473,10 +534,13 @@ class BlackJack:
 
                 if (self.intCards[i][j] == 8):
                     if (self.intCards[i][j + 1] == 8 and 4 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(8))
                         del cards[self.intCards[i].index(8)]
                         self.intCards[i].remove(8)
+                        self.madeIdx[i].append(self.cardsVal[i].index(8))
                         del cards[self.intCards[i].index(8)]
                         self.intCards[i].remove(8)
+                        self.madeIdx[i].append(self.cardsVal[i].index(4))
                         del cards[self.intCards[i].index(4)]
                         self.intCards[i].remove(4)
                         self.scoreText[i] += '팍팍싸'
@@ -484,10 +548,13 @@ class BlackJack:
 
                 if (self.intCards[i][j] == 9):
                     if (self.intCards[i][j + 1] == 9 and 2 in self.intCards[i]):
+                        self.madeIdx[i].append(self.cardsVal[i].index(9))
                         del cards[self.intCards[i].index(9)]
                         self.intCards[i].remove(9)
+                        self.madeIdx[i].append(self.cardsVal[i].index(9))
                         del cards[self.intCards[i].index(9)]
                         self.intCards[i].remove(9)
+                        self.madeIdx[i].append(self.cardsVal[i].index(2))
                         del cards[self.intCards[i].index(2)]
                         self.intCards[i].remove(2)
                         self.scoreText[i] += '구구리'
@@ -541,21 +608,30 @@ class BlackJack:
         for i in range(4):
             if self.score[i] == maxScore:
                 if overlab > 1:
-                    self.scoreText[i] += ' 무승부'
+                    self.winText[i] += ' 무승부'
                 else:
-                    self.scoreText[i] += ' 승'
+                    self.winText[i] += ' 승'
                     if i < 3:
                         playerMoney += self.betMoney[i] * 2
             else:
-                self.scoreText[i] += ' 패'
+                self.winText[i] += ' 패'
 
         for i in range(3):
             print(self.scoreText[i])
             Label(self.window, text=self.scoreText[i], font=self.fontstyle, bg="green",
-                  fg="cyan").place(x=50 + i * 250, y=250)
+                  fg="gold").place(x=50 + i * 250, y=290)
+            Label(self.window, text = self.winText[i],font = self.fontstyle,bg = 'green',fg = 'red').place(x=50 + i * 250, y=250)
+            if len(self.madeIdx[i]) != 0:
+                self.LcardsPlayer[i][self.madeIdx[i][0]].place(x=50 + self.madeIdx[i][0]*30 + i* 250, y=370)
+                self.LcardsPlayer[i][self.madeIdx[i][1]].place(x=50 + self.madeIdx[i][1] * 30 + i * 250, y=370)
+                self.LcardsPlayer[i][self.madeIdx[i][2]].place(x=50 + self.madeIdx[i][2] * 30 + i * 250, y=370)
+                self.playerCardText[i][self.madeIdx[i][0]].configure(fg = 'gold')
+                self.playerCardText[i][self.madeIdx[i][1]].configure(fg='gold')
+                self.playerCardText[i][self.madeIdx[i][2]].configure(fg='gold')
 
         Label(self.window, text=self.scoreText[3], font=self.fontstyle, bg="green",
-              fg="cyan").place(x=300, y=50)
+              fg="gold").place(x=300, y=60)
+        Label(self.window, text = self.winText[3],font = self.fontstyle,bg= 'green',fg = 'red').place(x=300, y=20)
 
         self.W5['state'] = 'disabled'
         self.W5['bg'] = 'gray'
